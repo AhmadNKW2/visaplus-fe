@@ -191,7 +191,7 @@ export default function AttributesPage() {
     });
     const [localAttributes, setLocalAttributes] = useState<Attribute[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize] = useState(20);
+    const [pageSize] = useState(10);
     const [filterValues, setFilterValues] = useState<FilterValues>({ search: "" });
 
     const { data, isLoading, error } = useAttributes({

@@ -69,7 +69,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             onFocus={handleFocus}
             onBlur={handleBlur}
             placeholder={props.placeholder || " "}
-            className={inputClasses}
+            className={`${inputClasses} disabled:opacity-50 peer`}
             dir={isRtl ? 'rtl' : 'ltr'}
             {...props}
           />
@@ -95,6 +95,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         labelLeftOffset={isSearchVariant ? 'left-9' : 'left-8'}
         isClearButton={true}
         isRtl={isRtl}
+        disabled={props.disabled}
       >
         <input
           ref={ref}
@@ -103,7 +104,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder=" "
-          className={inputClasses}
+          className={`${inputClasses} peer`}
           dir={isRtl ? 'rtl' : 'ltr'}
           {...props}
         />

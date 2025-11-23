@@ -23,8 +23,8 @@ const almarai = Almarai({
 });
 
 export const metadata: Metadata = {
-  title: "TH30 Admin Dashboard",
-  description: "Admin dashboard for TH30 management system",
+  title: "Visaplus Admin Dashboard",
+  description: "Admin dashboard for Visaplus management system",
 };
 
 export default function RootLayout({

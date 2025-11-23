@@ -5,7 +5,7 @@
 
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Select, SelectOption } from "../ui/select";
 import { DatePicker } from "../ui/date-picker";
@@ -46,6 +46,24 @@ export const Filter: React.FC<FilterProps> = ({
   onFilterChange,
   onReset,
 }) => {
+  const [searchValue, setSearchValue] = useState(values.search || "");
+
+  // Update local search value when values prop changes
+  useEffect(() => {
+    setSearchValue(values.search || "");
+  }, [values.search]);
+
+  // Debounce search changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchValue !== values.search) {
+        onFilterChange({ ...values, search: searchValue });
+      }
+    }, 750); // 300ms debounce
+
+    return () => clearTimeout(timer);
+  }, [searchValue, values, onFilterChange]);
+
   const handleFieldChange = (name: string, value: any) => {
     onFilterChange({ ...values, [name]: value });
   };
@@ -56,8 +74,8 @@ export const Filter: React.FC<FilterProps> = ({
         <Input
           key={filter.name}
           type="text"
-          value={values[filter.name] || ""}
-          onChange={(e) => handleFieldChange(filter.name, e.target.value)}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
           placeholder={filter.placeholder || "Search..."}
           isSearch
         />

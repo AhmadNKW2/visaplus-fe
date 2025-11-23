@@ -61,7 +61,6 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@example.com"
               disabled={isSubmitting}
               autoComplete="email"
             />
@@ -73,7 +72,6 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
               disabled={isSubmitting}
               autoComplete="current-password"
             />

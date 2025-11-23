@@ -40,6 +40,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         isFocused={isFocused}
         hasValue={hasValue}
         onClear={handleClear}
+        disabled={props.disabled}
       >
         <textarea
           ref={ref}

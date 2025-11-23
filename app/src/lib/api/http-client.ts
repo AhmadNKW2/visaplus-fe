@@ -101,8 +101,10 @@ class HttpClient {
       if (typeof window !== "undefined") {
         localStorage.removeItem("auth_token");
         localStorage.removeItem("auth_user");
-        // Redirect to login page
-        window.location.href = "/login";
+        // Redirect to login page if not already there
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
+        }
       }
     }
 

@@ -3,8 +3,8 @@
  */
 
 export const APP_CONFIG = {
-  name: "Ordonsooq Admin",
-  description: "Admin Panel for Ordonsooq",
+  name: "visaplus FE",
+  description: "Admin Panel for visaplus",
 } as const;
 
 export const API_CONFIG = {

@@ -199,9 +199,10 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             <div
               ref={ref}
               role="combobox"
+              aria-disabled={disabled}
               // ... other props ...
               // ADD 'flex items-center justify-center text-center' here:
-              className={`${selectClasses} ${disabled ? '' : 'cursor-pointer'} flex items-center justify-start text-center`}
+              className={`${selectClasses} ${disabled ? 'opacity-50' : 'cursor-pointer'} flex items-center justify-start text-center`}
               {...props}
             >
               <span className={hasValue ? 'text-third' : 'text-transparent'}>

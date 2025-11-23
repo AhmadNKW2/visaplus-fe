@@ -167,8 +167,8 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
             className={`${datePickerClasses} cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             {...props}
           >
-            <span className={hasValue ? 'text-third' : 'text-transparent'}>
-              {formatDate(selectedDate) || 'placeholder'}
+            <span className={hasValue ? 'text-third' : 'text-fourth/60'}>
+              {formatDate(selectedDate) || placeholder || 'Select date'}
             </span>
           </div>
         </FieldWrapper>
