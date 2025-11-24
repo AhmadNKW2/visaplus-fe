@@ -10,21 +10,25 @@ import { Input } from "../../../src/components/ui/input";
 import { Button } from "../../../src/components/ui/button";
 import { Card } from "../../../src/components/ui/card";
 import { AlertCircle } from "lucide-react";
+import { useValidation } from "../../../src/hooks/use-validation";
 
 export default function LoginPage() {
   const { login, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [authError, setAuthError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { errors, validateField, validateForm } = useValidation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setAuthError("");
 
-    // Basic validation
-    if (!email || !password) {
-      setError("Please enter both email and password");
+    if (!validateForm({ email, password }, {
+      email: ['required'],
+      password: ['required']
+    })) {
       return;
     }
 
@@ -33,7 +37,7 @@ export default function LoginPage() {
     try {
       await login({ email, password });
     } catch (err: any) {
-      setError(err?.message || "Login failed. Please check your credentials.");
+      setAuthError(err?.message || "Login failed. Please check your credentials.");
     } finally {
       setIsSubmitting(false);
     }
@@ -47,10 +51,10 @@ export default function LoginPage() {
           <p className="text-gray-600 mt-2">Sign in to your account</p>
         </div>
 
-        {error && (
+        {authError && (
           <div className="p-4 bg-danger/10 border border-danger rounded-lg flex items-start gap-3">
             <AlertCircle className="h-5 w-5 text-danger shrink-0 mt-0.5" />
-            <p className="text-sm text-danger">{error}</p>
+            <p className="text-sm text-danger">{authError}</p>
           </div>
         )}
 
@@ -60,9 +64,14 @@ export default function LoginPage() {
               label="Email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                validateField('email', e.target.value, ['required']);
+              }}
               disabled={isSubmitting}
               autoComplete="email"
+              error={errors.email}
+              name="email"
             />
           </div>
 
@@ -71,16 +80,21 @@ export default function LoginPage() {
               label="Password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                validateField('password', e.target.value, ['required']);
+              }}
               disabled={isSubmitting}
               autoComplete="current-password"
+              error={errors.password}
+              name="password"
             />
           </div>
 
           <Button
             type="submit"
             className="w-full"
-            disabled={isSubmitting || !email || !password}
+            disabled={isSubmitting}
             color="var(--color-fourth)"
           >
             {isSubmitting ? "Signing in..." : "Sign In"}

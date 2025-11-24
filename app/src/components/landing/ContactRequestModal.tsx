@@ -80,10 +80,10 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
     // wrap the content in a nice container
     return (
         <Modal isOpen={isOpen} onClose={onClose} variant="transparent" className="w-full max-w-4xl p-0 bg-transparent shadow-none">
-            <div className="flex flex-col md:flex-row w-full rounded-2xl overflow-hidden shadow-2xl" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="flex flex-col md:flex-row w-full h-full rounded-2xl overflow-hidden shadow-2xl overflow-y-auto" dir={language === 'ar' ? 'rtl' : 'ltr'}>
 
                 {/* Left: Branding/Contact */}
-                <div className="relative w-full md:w-2/5 bg-slate-900 p-8 text-white flex flex-col justify-between overflow-hidden">
+                <div className="relative w-full md:w-2/5 bg-slate-900 p-6 md:p-8 text-white flex flex-col justify-between flex-shrink-0 overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-full bg-linear-to-br from-blue-600/20 to-purple-600/20 z-0" />
                     <div className="relative z-10">
                         <h3 className="text-2xl font-bold mb-2">VisaPlus</h3>
@@ -113,7 +113,7 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
                 </div>
 
                 {/* Right: Form */}
-                <div className="w-full md:w-3/5 p-8 bg-gray-50">
+                <div className="w-full md:w-3/5 p-6 md:p-8 bg-gray-50">
                     <AnimatePresence mode="wait">
                         {submitted ? (
                             <motion.div

@@ -18,6 +18,7 @@ import {
     TableCell,
 } from "../ui/table";
 import { Card } from "../ui";
+import { useValidation, ValidationRule } from "../../hooks/use-validation";
 
 type AttributeRow = {
     attributeId: number;
@@ -41,7 +42,7 @@ export const CountryForm: React.FC<CountryFormProps> = ({
     countriesWorld,
     attributes,
     initialCountryWorldId,
-    initialAttributes = [],
+    initialAttributes,
     onSubmit,
     onCancel,
     isSubmitting,
@@ -51,6 +52,8 @@ export const CountryForm: React.FC<CountryFormProps> = ({
         initialCountryWorldId?.toString() || ""
     );
     const [attributeRows, setAttributeRows] = useState<AttributeRow[]>([]);
+
+    const { errors, validateField, validateForm } = useValidation();
 
     // Sort attributes by order
     const sortedAttributes = useMemo(() => {
@@ -63,13 +66,13 @@ export const CountryForm: React.FC<CountryFormProps> = ({
             setAttributeRows((prevRows) => {
                 // Create a map of existing rows for quick lookup
                 const existingRowsMap = new Map(prevRows.map(row => [row.attributeId, row]));
-                
+
                 return sortedAttributes.map((attr) => {
                     // Check if we have an existing row state for this attribute
                     const existingRow = existingRowsMap.get(attr.id);
-                    
+
                     // Check if we have initial data for this attribute (from props)
-                    const initialAttr = initialAttributes.find(
+                    const initialAttr = initialAttributes?.find(
                         (ia) => ia.attributeId === attr.id
                     );
 
@@ -119,9 +122,35 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                 row.attributeId === attributeId ? { ...row, [field]: value } : row
             )
         );
+
+        if (field === 'value_en') {
+            validateField(`attribute_${attributeId}_en`, value, ['required', 'isEn']);
+        } else if (field === 'value_ar') {
+            validateField(`attribute_${attributeId}_ar`, value, ['required', 'isAr']);
+        }
     };
 
     const handleSubmit = () => {
+        const values: Record<string, any> = {
+            countryWorldId: selectedCountryWorldId,
+        };
+        const config: Record<string, ValidationRule[]> = {
+            countryWorldId: ['required'],
+        };
+
+        attributeRows.forEach(row => {
+            if (row.isActive) {
+                values[`attribute_${row.attributeId}_en`] = row.value_en;
+                values[`attribute_${row.attributeId}_ar`] = row.value_ar;
+                config[`attribute_${row.attributeId}_en`] = ['required', 'isEn'];
+                config[`attribute_${row.attributeId}_ar`] = ['required', 'isAr'];
+            }
+        });
+
+        if (!validateForm(values, config)) {
+            return;
+        }
+
         const countryData = {
             countryWorldId: parseInt(selectedCountryWorldId),
             attributes: attributeRows.map((row) => ({
@@ -160,7 +189,7 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                     </Button>
                     <Button
                         onClick={handleSubmit}
-                        disabled={isSubmitting || !selectedCountryWorldId}
+                        disabled={isSubmitting}
                     >
                         {submitButtonText}
                     </Button>
@@ -180,10 +209,15 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                         <Select
                             label="Select Country"
                             value={selectedCountryWorldId}
-                            onChange={(val) => setSelectedCountryWorldId(val as string)}
+                            onChange={(val) => {
+                                setSelectedCountryWorldId(val as string);
+                                validateField('countryWorldId', val, ['required']);
+                            }}
                             options={countryOptions}
                             placeholder="Choose a country"
                             search
+                            error={errors.countryWorldId}
+                            name="countryWorldId"
                         />
                     </div>
 
@@ -257,6 +291,8 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                                                 }
                                                 placeholder="Enter English value"
                                                 disabled={isRowDisabled}
+                                                error={errors[`attribute_${row.attributeId}_en`]}
+                                                name={`attribute_${row.attributeId}_en`}
                                             />
                                         </TableCell>
                                         <TableCell>
@@ -273,6 +309,8 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                                                 placeholder="أدخل القيمة بالعربية"
                                                 isRtl
                                                 disabled={isRowDisabled}
+                                                error={errors[`attribute_${row.attributeId}_ar`]}
+                                                name={`attribute_${row.attributeId}_ar`}
                                             />
                                         </TableCell>
                                         <TableCell className="text-center!">

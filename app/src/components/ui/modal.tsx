@@ -93,16 +93,16 @@ export const Modal: React.FC<ModalProps> = ({
     >
       <div
         className={`
-          relative w-200
+          relative w-full max-w-4xl max-md:max-h-[90vh] md:overflow-y-auto
           ${variant === 'default' ? 'bg-white p-5' : ''}
           rounded-rounded1 shadow-2xl
-          flex flex-col justify-center items-center gap-5
+          flex flex-col justify-start
           transition-all duration-200 ease-out
           ${isAnimating 
             ? 'opacity-100 scale-100 translate-y-0' 
             : 'opacity-0 scale-95 -translate-y-4'
-        }
-        `}
+        } ${className}`}
+        onClick={(e) => e.stopPropagation()}
       >
 
         {/* Content */}

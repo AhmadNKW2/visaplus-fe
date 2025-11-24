@@ -82,7 +82,7 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
 };
 
 // Shared field styles constant
-export const FIELD_BASE_CLASSES = 'border-2 rounded-rounded1 placeholder-fourth/60 bg-secondary focus:outline-none focus:ring-2 focus:ring-fifth focus:border-transparent transition-[border-color,box-shadow,background-color] disabled:cursor-not-allowed aria-disabled:cursor-not-allowed [&:-webkit-autofill]:bg-secondary [&:-webkit-autofill]:text-third [&:-webkit-autofill]:shadow-[0_0_0px_1000px_theme(colors.secondary)_inset]';
+export const FIELD_BASE_CLASSES = 'border-2 rounded-rounded1 placeholder-fourth/60 bg-secondary focus:outline-none focus:border-fifth transition-[border-color,background-color] disabled:cursor-not-allowed aria-disabled:cursor-not-allowed [&:-webkit-autofill]:bg-secondary [&:-webkit-autofill]:text-third [&:-webkit-autofill]:shadow-[0_0_0px_1000px_theme(colors.secondary)_inset]';
 
 // Shared icon styles for consistent appearance across all field components
 export const FIELD_ICON_CLASSES = 'h-4 w-4 text-fourth/60';
@@ -92,31 +92,31 @@ export const FIELD_RIGHT_ICON_COLOR = 'text-fourth/60';
 
 // Get right icon position based on size
 export const getRightIconPosition = (size: 'default' | 'sm') => {
-  return size === 'sm' ? 'right-4' : 'right-4';
+    return size === 'sm' ? 'right-4' : 'right-4';
 };
 
 // Get field classes based on size variant
 export const getFieldClassesBySize = (
-  size: 'default' | 'sm',
-  error?: string,
-  hasValue?: boolean,
-  hasLeftIcon?: boolean,
-  hasRightIcon?: boolean,
-  className?: string,
-  isRtl?: boolean
+    size: 'default' | 'sm',
+    error?: string,
+    hasValue?: boolean,
+    hasLeftIcon?: boolean,
+    hasRightIcon?: boolean,
+    className?: string,
+    isRtl?: boolean
 ) => {
-  const borderColor = error ? 'border-danger' : 'border-primary';
-  
-  if (size === 'sm') {
-    const rightPadding = hasRightIcon ? 'pr-7' : 'pr-2';
-    const leftPadding = hasLeftIcon ? 'pl-7' : 'pl-2';
-    return `${className || ''} ${FIELD_BASE_CLASSES} w-20 h-11 p-1 ${leftPadding} ${rightPadding} text-base ${borderColor}`;
-  }
-  
-  // Default size
-  const leftPadding = hasLeftIcon ? 'pl-9' : (isRtl ? 'pl-8' : 'pl-4');
-  const rightPadding = hasRightIcon ? 'pr-13' : (isRtl ? 'pr-4' : 'pr-8');
-  return `${className || ''} ${FIELD_BASE_CLASSES} w-full py-3 ${leftPadding} ${rightPadding} ${borderColor}`;
+    const borderColor = error ? 'border-danger' : 'border-primary';
+
+    if (size === 'sm') {
+        const rightPadding = hasRightIcon ? 'pr-7' : 'pr-2';
+        const leftPadding = hasLeftIcon ? 'pl-7' : 'pl-2';
+        return `${className || ''} ${FIELD_BASE_CLASSES} w-20 h-11 p-1 ${leftPadding} ${rightPadding} text-base ${borderColor}`;
+    }
+
+    // Default size
+    const leftPadding = hasLeftIcon ? 'pl-9' : (isRtl ? 'pl-8' : 'pl-4');
+    const rightPadding = hasRightIcon ? 'pr-13' : (isRtl ? 'pr-4' : 'pr-8');
+    return `${className || ''} ${FIELD_BASE_CLASSES} w-full py-3 ${leftPadding} ${rightPadding} ${borderColor}`;
 };
 
 // Legacy function for backward compatibility

@@ -47,6 +47,7 @@ import {
     useReorderAttributes,
 } from "../../../src/services/attributes/hooks/use-attributes";
 import { Attribute } from "../../../src/services/attributes/types/attribute.types";
+import { useValidation, ValidationRule } from "../../../src/hooks/use-validation";
 
 type EditMode = {
     id: number | "new";
@@ -66,6 +67,8 @@ function SortableRow({
     onEditModeChange,
     onKeyDown,
     isSaving,
+    errors,
+    validateField,
 }: {
     attribute: Attribute;
     isEditing: boolean;
@@ -77,6 +80,8 @@ function SortableRow({
     onEditModeChange: (mode: EditMode) => void;
     onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     isSaving: boolean;
+    errors: Record<string, string>;
+    validateField: (name: string, value: any, rules: ValidationRule[]) => boolean;
 }) {
     const {
         attributes: sortableAttributes,
@@ -114,13 +119,16 @@ function SortableRow({
                     <Input
                         type="text"
                         value={editMode.nameEn}
-                        onChange={(e) =>
-                            onEditModeChange({ ...editMode, nameEn: e.target.value })
-                        }
+                        onChange={(e) => {
+                            onEditModeChange({ ...editMode, nameEn: e.target.value });
+                            validateField('nameEn', e.target.value, ['required', 'isEn']);
+                        }}
                         onKeyDown={onKeyDown}
                         placeholder="Enter English name"
                         className="w-full"
                         autoFocus
+                        error={errors.nameEn}
+                        name="nameEn"
                     />
                 ) : (
                     attribute.name_en
@@ -131,13 +139,16 @@ function SortableRow({
                     <Input
                         type="text"
                         value={editMode.nameAr}
-                        onChange={(e) =>
-                            onEditModeChange({ ...editMode, nameAr: e.target.value })
-                        }
+                        onChange={(e) => {
+                            onEditModeChange({ ...editMode, nameAr: e.target.value });
+                            validateField('nameAr', e.target.value, ['required', 'isAr']);
+                        }}
                         onKeyDown={onKeyDown}
                         placeholder="أدخل الاسم بالعربية"
                         className="w-full"
                         isRtl
+                        error={errors.nameAr}
+                        name="nameAr"
                     />
                 ) : (
                     <div>{attribute.name_ar}</div>
@@ -194,6 +205,8 @@ export default function AttributesPage() {
     const [pageSize] = useState(10);
     const [filterValues, setFilterValues] = useState<FilterValues>({ search: "" });
 
+    const { errors, validateField, validateForm, clearError } = useValidation();
+
     const { data, isLoading, error } = useAttributes({
         page: currentPage,
         limit: pageSize,
@@ -227,6 +240,8 @@ export default function AttributesPage() {
             nameEn: "",
             nameAr: "",
         });
+        clearError('nameEn');
+        clearError('nameAr');
     };
 
     const handleEdit = (attribute: Attribute) => {
@@ -235,16 +250,26 @@ export default function AttributesPage() {
             nameEn: attribute.name_en,
             nameAr: attribute.name_ar,
         });
+        clearError('nameEn');
+        clearError('nameAr');
     };
 
     const handleCancel = () => {
         setEditMode(null);
+        clearError('nameEn');
+        clearError('nameAr');
     };
 
     const handleSave = async () => {
         if (!editMode) return;
 
-        if (!editMode.nameEn.trim() || !editMode.nameAr.trim()) {
+        if (!validateForm({
+            nameEn: editMode.nameEn,
+            nameAr: editMode.nameAr
+        }, {
+            nameEn: ['required', 'isEn'],
+            nameAr: ['required', 'isAr']
+        })) {
             return;
         }
 
@@ -401,103 +426,111 @@ export default function AttributesPage() {
                                     <TableHead width="16%">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
-                        <TableBody>
-                            {/* Sortable Attributes */}
-                            <SortableContext
-                                items={localAttributes.map((attr) => attr.id)}
-                                strategy={verticalListSortingStrategy}
-                            >
-                                {localAttributes.map((attribute) => {
-                                    const isEditing = editMode?.id === attribute.id;
+                            <TableBody>
+                                {/* Sortable Attributes */}
+                                <SortableContext
+                                    items={localAttributes.map((attr) => attr.id)}
+                                    strategy={verticalListSortingStrategy}
+                                >
+                                    {localAttributes.map((attribute) => {
+                                        const isEditing = editMode?.id === attribute.id;
 
-                                    return (
-                                        <SortableRow
-                                            key={attribute.id}
-                                            attribute={attribute}
-                                            isEditing={isEditing}
-                                            editMode={editMode}
-                                            onEdit={() => handleEdit(attribute)}
-                                            onSave={handleSave}
-                                            onCancel={handleCancel}
-                                            onDelete={() => handleDeleteClick(attribute)}
-                                            onEditModeChange={setEditMode}
-                                            onKeyDown={handleKeyDown}
-                                            isSaving={updateMutation.isPending}
-                                        />
-                                    );
-                                })}
-                            </SortableContext>
-
-                            {/* New Row for Creating - Moved to bottom */}
-                            {editMode?.id === "new" && (
-                                <TableRow className="bg-primary/50">
-                                    <TableCell>-</TableCell>
-                                    <TableCell>-</TableCell>
-                                    <TableCell>
-                                        <Input
-                                            type="text"
-                                            value={editMode.nameEn}
-                                            onChange={(e) =>
-                                                setEditMode({ ...editMode, nameEn: e.target.value })
-                                            }
-                                            onKeyDown={handleKeyDown}
-                                            placeholder="Enter English name"
-                                            className="w-full"
-                                            autoFocus
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Input
-                                            type="text"
-                                            value={editMode.nameAr}
-                                            onChange={(e) =>
-                                                setEditMode({ ...editMode, nameAr: e.target.value })
-                                            }
-                                            isRtl
-                                            onKeyDown={handleKeyDown}
-                                            placeholder="أدخل الاسم بالعربية"
-                                            className="w-full"
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center justify-start gap-2">
-                                            <IconButton
-                                                onClick={handleSave}
-                                                disabled={createMutation.isPending}
-                                                variant="check"
-                                                title="Save"
+                                        return (
+                                            <SortableRow
+                                                key={attribute.id}
+                                                attribute={attribute}
+                                                isEditing={isEditing}
+                                                editMode={editMode}
+                                                onEdit={() => handleEdit(attribute)}
+                                                onSave={handleSave}
+                                                onCancel={handleCancel}
+                                                onDelete={() => handleDeleteClick(attribute)}
+                                                onEditModeChange={setEditMode}
+                                                onKeyDown={handleKeyDown}
+                                                isSaving={updateMutation.isPending}
+                                                errors={errors}
+                                                validateField={validateField}
                                             />
-                                            <IconButton
-                                                onClick={handleCancel}
-                                                disabled={createMutation.isPending}
-                                                variant="cancel"
-                                                title="Cancel"
-                                            />
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </DndContext>
+                                        );
+                                    })}
+                                </SortableContext>
 
-                {/* Pagination */}
-                <div className="mt-6">
-                    <Pagination
-                        pagination={{
-                            currentPage: meta.page || currentPage,
-                            pageSize: meta.limit || pageSize,
-                            totalItems: meta.total || 0,
-                            totalPages: meta.totalPages || 1,
-                            hasNextPage: meta.hasNextPage || false,
-                            hasPreviousPage: meta.hasPreviousPage || false,
-                        }}
-                        onPageChange={handlePageChange}
-                        onPageSizeChange={handlePageSizeChange}
-                        showPageSize={true}
-                    />
-                </div>
-            </>
+                                {/* New Row for Creating - Moved to bottom */}
+                                {editMode?.id === "new" && (
+                                    <TableRow className="bg-primary/50">
+                                        <TableCell>-</TableCell>
+                                        <TableCell>-</TableCell>
+                                        <TableCell>
+                                            <Input
+                                                type="text"
+                                                value={editMode.nameEn}
+                                                onChange={(e) => {
+                                                    setEditMode({ ...editMode, nameEn: e.target.value });
+                                                    validateField('nameEn', e.target.value, ['required', 'isEn']);
+                                                }}
+                                                onKeyDown={handleKeyDown}
+                                                placeholder="Enter English name"
+                                                className="w-full"
+                                                autoFocus
+                                                error={errors.nameEn}
+                                                name="nameEn"
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <Input
+                                                type="text"
+                                                value={editMode.nameAr}
+                                                onChange={(e) => {
+                                                    setEditMode({ ...editMode, nameAr: e.target.value });
+                                                    validateField('nameAr', e.target.value, ['required', 'isAr']);
+                                                }}
+                                                isRtl
+                                                onKeyDown={handleKeyDown}
+                                                placeholder="أدخل الاسم بالعربية"
+                                                className="w-full"
+                                                error={errors.nameAr}
+                                                name="nameAr"
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center justify-start gap-2">
+                                                <IconButton
+                                                    onClick={handleSave}
+                                                    disabled={createMutation.isPending}
+                                                    variant="check"
+                                                    title="Save"
+                                                />
+                                                <IconButton
+                                                    onClick={handleCancel}
+                                                    disabled={createMutation.isPending}
+                                                    variant="cancel"
+                                                    title="Cancel"
+                                                />
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </DndContext>
+
+                    {/* Pagination */}
+                    <div className="mt-6">
+                        <Pagination
+                            pagination={{
+                                currentPage: meta.page || currentPage,
+                                pageSize: meta.limit || pageSize,
+                                totalItems: meta.total || 0,
+                                totalPages: meta.totalPages || 1,
+                                hasNextPage: meta.hasNextPage || false,
+                                hasPreviousPage: meta.hasPreviousPage || false,
+                            }}
+                            onPageChange={handlePageChange}
+                            onPageSizeChange={handlePageSizeChange}
+                            showPageSize={true}
+                        />
+                    </div>
+                </>
             ) : (
                 <div className="flex flex-col items-center justify-center py-12">
                     <p className="text-gray-500 text-lg mb-4">No attributes found</p>

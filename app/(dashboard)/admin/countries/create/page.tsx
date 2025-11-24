@@ -12,6 +12,7 @@ import {
     useCountriesWorld,
 } from "../../../../src/services/countries/hooks/use-countries";
 import { useAttributes } from "../../../../src/services/attributes/hooks/use-attributes";
+import React from "react";
 
 export default function CreateCountryPage() {
     const router = useRouter();
@@ -19,7 +20,8 @@ export default function CreateCountryPage() {
     const { data: attributesData, isLoading: isLoadingAttributes } = useAttributes({ limit: 1000 });
     const createMutation = useCreateCountry();
 
-    const attributes = attributesData?.items || [];
+    // Memoize attributes to prevent unnecessary re-renders in CountryForm
+    const attributes = React.useMemo(() => attributesData?.items || [], [attributesData?.items]);
 
     const handleSubmit = async (data: any) => {
         if (!data.countryWorldId) {

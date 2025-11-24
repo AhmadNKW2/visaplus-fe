@@ -32,7 +32,7 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
     <div
       className={`
         relative w-full transition-all duration-300 ease-in-out
-        ${isOpen ? 'h-auto sm:h-[200px]' : 'h-[200px]'}
+        ${isOpen ? 'h-auto sm:h-[150px]' : 'h-[150px]'}
         ${isOpen ? 'z-50' : 'z-0 delay-200'} 
       `}
     >
@@ -50,7 +50,7 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
       >
         <motion.div
           layout="position"
-          className="relative w-full h-[200px] shrink-0 overflow-hidden"
+          className="relative w-full h-[150px] shrink-0 overflow-hidden"
         >
           <Image
             src={country.countryWorld.image_url}

@@ -21,6 +21,7 @@ interface SelectProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChan
   search?: boolean;
   multiple?: boolean;
   size?: 'default' | 'sm';
+  name?: string;
 }
 
 export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
