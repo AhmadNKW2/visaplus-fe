@@ -6,17 +6,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CountryForm } from "../../src/components/countries/CountryForm";
+import { CountryForm } from "../../../../src/components/countries/CountryForm";
 import {
     useCreateCountry,
     useCountriesWorld,
-} from "../../src/services/countries/hooks/use-countries";
-import { useAttributes } from "../../src/services/attributes/hooks/use-attributes";
+} from "../../../../src/services/countries/hooks/use-countries";
+import { useAttributes } from "../../../../src/services/attributes/hooks/use-attributes";
 
 export default function CreateCountryPage() {
     const router = useRouter();
     const { data: countriesWorld, isLoading: isLoadingCountries } = useCountriesWorld();
-    const { data: attributesData, isLoading: isLoadingAttributes } = useAttributes();
+    const { data: attributesData, isLoading: isLoadingAttributes } = useAttributes({ limit: 1000 });
     const createMutation = useCreateCountry();
 
     const attributes = attributesData?.items || [];
@@ -28,14 +28,14 @@ export default function CreateCountryPage() {
 
         try {
             await createMutation.mutateAsync(data);
-            router.push("/countries");
+            router.push("/admin/countries");
         } catch (error: any) {
             console.error("Failed to create country:", error);
         }
     };
 
     const handleCancel = () => {
-        router.push("/countries");
+        router.push("/admin/countries");
     };
 
     if (isLoadingCountries || isLoadingAttributes) {

@@ -5,10 +5,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAuth } from "../src/contexts/auth.context";
-import { Input } from "../src/components/ui/input";
-import { Button } from "../src/components/ui/button";
-import { Card } from "../src/components/ui/card";
+import { useAuth } from "../../../src/contexts/auth.context";
+import { Input } from "../../../src/components/ui/input";
+import { Button } from "../../../src/components/ui/button";
+import { Card } from "../../../src/components/ui/card";
 import { AlertCircle } from "lucide-react";
 
 export default function LoginPage() {

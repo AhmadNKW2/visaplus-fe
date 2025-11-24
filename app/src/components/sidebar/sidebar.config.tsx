@@ -36,7 +36,7 @@ export const sidebarConfig = {
       defaultOpen: true,
       links: [
         {
-          href: '/countries',
+          href: '/admin/countries',
           label: 'Countries',
           icon: (
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,7 +50,7 @@ export const sidebarConfig = {
           ),
         },
         {
-          href: '/attributes',
+          href: '/admin/attributes',
           label: 'Attributes',
           icon: (
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,7 +64,7 @@ export const sidebarConfig = {
           ),
         },
         {
-          href: '/contact-requests',
+          href: '/admin/contact-requests',
           label: 'Contact Requests',
           icon: (
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

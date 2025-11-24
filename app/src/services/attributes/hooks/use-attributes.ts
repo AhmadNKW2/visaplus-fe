@@ -21,7 +21,7 @@ export const useAttributes = (params?: {
   search?: string;
 }) => {
   return useQuery({
-    queryKey: [queryKeys.attributes.all, params],
+    queryKey: [...queryKeys.attributes.all, params],
     queryFn: () => attributeService.getAttributes(params),
     placeholderData: (previousData) => previousData, // Keep previous data while loading
     select: (response) => {
@@ -79,7 +79,7 @@ export const useCreateAttribute = () => {
     mutationFn: (data: CreateAttributeDto) =>
       attributeService.createAttribute(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.attributes.all] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.attributes.all });
     },
   });
 };
@@ -94,7 +94,7 @@ export const useUpdateAttribute = () => {
     mutationFn: ({ id, data }: { id: number; data: UpdateAttributeDto }) =>
       attributeService.updateAttribute(id, data),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.attributes.all] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.attributes.all });
       queryClient.invalidateQueries({
         queryKey: queryKeys.attributes.detail(variables.id),
       });
@@ -111,7 +111,7 @@ export const useDeleteAttribute = () => {
   return useMutation({
     mutationFn: (id: number) => attributeService.deleteAttribute(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.attributes.all] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.attributes.all });
     },
   });
 };
@@ -126,7 +126,7 @@ export const useReorderAttributes = () => {
     mutationFn: (data: ReorderAttributeDto) =>
       attributeService.reorderAttributes(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.attributes.all] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.attributes.all });
     },
   });
 };

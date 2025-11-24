@@ -21,7 +21,7 @@ export const useCountries = (params?: {
   search?: string;
 }) => {
   return useQuery({
-    queryKey: [queryKeys.countries.all, params],
+    queryKey: [...queryKeys.countries.all, params],
     queryFn: () => countryService.getCountries(params),
     placeholderData: (previousData) => previousData, // Keep previous data while loading
     select: (response) => {
@@ -83,7 +83,7 @@ export const useCountry = (id: number) => {
  */
 export const useCountriesWorld = () => {
   return useQuery({
-    queryKey: [queryKeys.countries.world],
+    queryKey: [...queryKeys.countries.world],
     queryFn: () => countryService.getCountriesWorld(),
     select: (response) => {
       // API returns nested structure: response.data.data
@@ -108,7 +108,7 @@ export const useCreateCountry = () => {
     mutationFn: (data: CreateCountryDto) =>
       countryService.createCountry(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.countries.all] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.countries.all });
     },
   });
 };
@@ -123,7 +123,7 @@ export const useUpdateCountry = () => {
     mutationFn: ({ id, data }: { id: number; data: UpdateCountryDto }) =>
       countryService.updateCountry(id, data),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.countries.all] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.countries.all });
       queryClient.invalidateQueries({
         queryKey: queryKeys.countries.detail(variables.id),
       });
@@ -140,7 +140,7 @@ export const useDeleteCountry = () => {
   return useMutation({
     mutationFn: (id: number) => countryService.deleteCountry(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.countries.all] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.countries.all });
     },
   });
 };
@@ -155,7 +155,7 @@ export const useReorderCountries = () => {
     mutationFn: (data: ReorderCountryDto) =>
       countryService.reorderCountries(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.countries.all] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.countries.all });
     },
   });
 };

@@ -116,7 +116,7 @@ export const getFieldClassesBySize = (
   // Default size
   const leftPadding = hasLeftIcon ? 'pl-9' : (isRtl ? 'pl-8' : 'pl-4');
   const rightPadding = hasRightIcon ? 'pr-13' : (isRtl ? 'pr-4' : 'pr-8');
-  return `${className || ''} ${FIELD_BASE_CLASSES} w-full py-2 ${leftPadding} ${rightPadding} ${borderColor}`;
+  return `${className || ''} ${FIELD_BASE_CLASSES} w-full py-3 ${leftPadding} ${rightPadding} ${borderColor}`;
 };
 
 // Legacy function for backward compatibility

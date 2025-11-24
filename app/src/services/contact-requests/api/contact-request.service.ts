@@ -43,6 +43,13 @@ class ContactRequestService extends BaseService<ContactRequest> {
   async getContactRequestById(id: number): Promise<ApiResponse<ContactRequest>> {
     return this.getById(id);
   }
+
+  /**
+   * Create a new contact request
+   */
+  async createContactRequest(data: Partial<ContactRequest>): Promise<ApiResponse<ContactRequest>> {
+    return this.create(data, { skipToast: true });
+  }
 }
 
 export const contactRequestService = new ContactRequestService();

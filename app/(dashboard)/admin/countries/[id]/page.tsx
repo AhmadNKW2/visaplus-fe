@@ -7,13 +7,13 @@
 
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
-import { CountryForm } from "../../src/components/countries/CountryForm";
+import { CountryForm } from "../../../../src/components/countries/CountryForm";
 import {
     useCountry,
     useUpdateCountry,
     useCountriesWorld,
-} from "../../src/services/countries/hooks/use-countries";
-import { useAttributes } from "../../src/services/attributes/hooks/use-attributes";
+} from "../../../../src/services/countries/hooks/use-countries";
+import { useAttributes } from "../../../../src/services/attributes/hooks/use-attributes";
 
 export default function EditCountryPage() {
     const router = useRouter();
@@ -22,7 +22,7 @@ export default function EditCountryPage() {
 
     const { data: country, isLoading: isLoadingCountry } = useCountry(countryId);
     const { data: countriesWorld, isLoading: isLoadingCountries } = useCountriesWorld();
-    const { data: attributesData, isLoading: isLoadingAttributes } = useAttributes();
+    const { data: attributesData, isLoading: isLoadingAttributes } = useAttributes({ limit: 1000 });
     const updateMutation = useUpdateCountry();
 
     const attributes = attributesData?.items || [];
@@ -37,14 +37,14 @@ export default function EditCountryPage() {
                 id: countryId,
                 data,
             });
-            router.push("/countries");
+            router.push("/admin/countries");
         } catch (error: any) {
             console.error("Failed to update country:", error);
         }
     };
 
     const handleCancel = () => {
-        router.push("/countries");
+        router.push("/admin/countries");
     };
 
     if (isLoadingCountry || isLoadingCountries || isLoadingAttributes) {

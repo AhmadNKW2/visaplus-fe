@@ -1,6 +1,7 @@
 /**
  * Contact Requests Page
  * Main page for viewing contact requests with table view
+ * Updated imports for new structure
  */
 
 "use client";
@@ -13,11 +14,11 @@ import {
     TableRow,
     TableHead,
     TableCell,
-} from "../src/components/ui/table";
-import { Pagination } from "../src/components/ui/pagination";
-import { Filter, FilterRow, FilterValues } from "../src/components/common/Filter";
-import { useContactRequests } from "../src/services/contact-requests/hooks/use-contact-requests";
-import { ContactRequest } from "../src/services/contact-requests/types/contact-request.types";
+} from "../../../src/components/ui/table";
+import { Pagination } from "../../../src/components/ui/pagination";
+import { Filter, FilterRow, FilterValues } from "../../../src/components/common/Filter";
+import { useContactRequests } from "../../../src/services/contact-requests/hooks/use-contact-requests";
+import { ContactRequest } from "../../../src/services/contact-requests/types/contact-request.types";
 
 export default function ContactRequestsPage() {
     const [currentPage, setCurrentPage] = useState(1);

@@ -33,18 +33,18 @@ import {
     TableRow,
     TableHead,
     TableCell,
-} from "../src/components/ui/table";
-import { Button } from "../src/components/ui/button";
-import { IconButton } from "../src/components/ui/icon-button";
-import { Pagination } from "../src/components/ui/pagination";
-import { Filter, FilterRow, FilterValues } from "../src/components/common/Filter";
-import { DeleteConfirmationModal } from "../src/components/common/DeleteConfirmationModal";
+} from "../../../src/components/ui/table";
+import { Button } from "../../../src/components/ui/button";
+import { IconButton } from "../../../src/components/ui/icon-button";
+import { Pagination } from "../../../src/components/ui/pagination";
+import { Filter, FilterRow, FilterValues } from "../../../src/components/common/Filter";
+import { DeleteConfirmationModal } from "../../../src/components/common/DeleteConfirmationModal";
 import {
     useCountries,
     useDeleteCountry,
     useReorderCountries,
-} from "../src/services/countries/hooks/use-countries";
-import { Country } from "../src/services/countries/types/country.types";
+} from "../../../src/services/countries/hooks/use-countries";
+import { Country } from "../../../src/services/countries/types/country.types";
 import Image from "next/image";
 
 // Sortable row component
@@ -161,11 +161,11 @@ export default function CountriesPage() {
     }, [data?.items]);
 
     const handleCreate = () => {
-        router.push("/countries/create");
+        router.push("/admin/countries/create");
     };
 
     const handleEdit = (countryId: number) => {
-        router.push(`/countries/${countryId}`);
+        router.push(`/admin/countries/${countryId}`);
     };
 
     const handleDeleteClick = (country: Country) => {

@@ -88,7 +88,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         });
 
         // Redirect to dashboard
-        router.push("/");
+        router.push("/admin/countries");
       }
     } catch (error: any) {
       console.error("Login failed:", error);
@@ -114,7 +114,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isLoading: false,
       });
 
-      router.push("/login");
+      router.push("/admin/login");
     }
   };
 

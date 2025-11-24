@@ -102,8 +102,8 @@ class HttpClient {
         localStorage.removeItem("auth_token");
         localStorage.removeItem("auth_user");
         // Redirect to login page if not already there
-        if (!window.location.pathname.includes("/login")) {
-          window.location.href = "/login";
+        if (!window.location.pathname.includes("/admin/login")) {
+          window.location.href = "/admin/login";
         }
       }
     }
@@ -116,7 +116,8 @@ class HttpClient {
    */
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    skipToast: boolean = false
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const method = options.method || "GET";
@@ -145,7 +146,7 @@ class HttpClient {
       const data = await response.json();
 
       // Show success toast for mutating operations
-      if (typeof window !== "undefined" && ["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+      if (!skipToast && typeof window !== "undefined" && ["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
         const successMessages: Record<string, string> = {
           POST: "Created successfully!",
           PUT: "Updated successfully!",
@@ -200,40 +201,40 @@ class HttpClient {
   /**
    * POST request
    */
-  public post<T>(endpoint: string, data?: any): Promise<T> {
+  public post<T>(endpoint: string, data?: any, config?: { skipToast?: boolean }): Promise<T> {
     return this.request<T>(endpoint, {
       method: "POST",
       body: JSON.stringify(data),
-    });
+    }, config?.skipToast);
   }
 
   /**
    * PUT request
    */
-  public put<T>(endpoint: string, data?: any): Promise<T> {
+  public put<T>(endpoint: string, data?: any, config?: { skipToast?: boolean }): Promise<T> {
     return this.request<T>(endpoint, {
       method: "PUT",
       body: JSON.stringify(data),
-    });
+    }, config?.skipToast);
   }
 
   /**
    * PATCH request
    */
-  public patch<T>(endpoint: string, data?: any): Promise<T> {
+  public patch<T>(endpoint: string, data?: any, config?: { skipToast?: boolean }): Promise<T> {
     return this.request<T>(endpoint, {
       method: "PATCH",
       body: JSON.stringify(data),
-    });
+    }, config?.skipToast);
   }
 
   /**
    * DELETE request
    */
-  public delete<T>(endpoint: string): Promise<T> {
+  public delete<T>(endpoint: string, config?: { skipToast?: boolean }): Promise<T> {
     return this.request<T>(endpoint, {
       method: "DELETE",
-    });
+    }, config?.skipToast);
   }
 
   /**

@@ -47,7 +47,7 @@ export const useContactRequests = (params?: {
   endDate?: string;
 }) => {
   return useQuery({
-    queryKey: [queryKeys.contactRequests.all, params],
+    queryKey: [...queryKeys.contactRequests.all, params],
     queryFn: () => contactRequestService.getContactRequests(params),
     placeholderData: (previousData) => previousData, // Keep previous data while loading
     select: (response) => {

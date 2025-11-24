@@ -57,25 +57,39 @@ export const CountryForm: React.FC<CountryFormProps> = ({
         return [...attributes].sort((a, b) => (a.order || 0) - (b.order || 0));
     }, [attributes]);
 
-    // Initialize form with all attributes - only run once when sortedAttributes are loaded
+    // Initialize form with all attributes and sync when attributes change
     useEffect(() => {
-        if (sortedAttributes.length > 0 && attributeRows.length === 0) {
-            const rows: AttributeRow[] = sortedAttributes.map((attr) => {
-                const existingAttr = initialAttributes.find(
-                    (ia) => ia.attributeId === attr.id
-                );
-                return {
-                    attributeId: attr.id,
-                    value_en: existingAttr?.value_en || "",
-                    value_ar: existingAttr?.value_ar || "",
-                    // Active by default when creating new country, or use existing value when editing
-                    isActive: existingAttr?.isActive ?? true,
-                };
+        if (sortedAttributes.length > 0) {
+            setAttributeRows((prevRows) => {
+                // Create a map of existing rows for quick lookup
+                const existingRowsMap = new Map(prevRows.map(row => [row.attributeId, row]));
+                
+                return sortedAttributes.map((attr) => {
+                    // Check if we have an existing row state for this attribute
+                    const existingRow = existingRowsMap.get(attr.id);
+                    
+                    // Check if we have initial data for this attribute (from props)
+                    const initialAttr = initialAttributes.find(
+                        (ia) => ia.attributeId === attr.id
+                    );
+
+                    // If we have an existing row state, preserve it (user might have edited it)
+                    if (existingRow) {
+                        return existingRow;
+                    }
+
+                    // Otherwise, initialize from props or default
+                    return {
+                        attributeId: attr.id,
+                        value_en: initialAttr?.value_en || "",
+                        value_ar: initialAttr?.value_ar || "",
+                        // Active by default when creating new country, or use existing value when editing
+                        isActive: initialAttr?.isActive ?? true,
+                    };
+                });
             });
-            setAttributeRows(rows);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sortedAttributes]);
+    }, [sortedAttributes, initialAttributes]);
 
     useEffect(() => {
         if (initialCountryWorldId) {

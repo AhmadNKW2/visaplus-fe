@@ -35,8 +35,8 @@ export abstract class BaseService<T> {
   /**
    * Create a new item
    */
-  protected async create(data: Partial<T>): Promise<ApiResponse<T>> {
-    return httpClient.post<ApiResponse<T>>(this.endpoint, data);
+  protected async create(data: Partial<T>, config?: { skipToast?: boolean }): Promise<ApiResponse<T>> {
+    return httpClient.post<ApiResponse<T>>(this.endpoint, data, config);
   }
 
   /**

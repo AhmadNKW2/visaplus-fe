@@ -32,21 +32,21 @@ import {
     TableRow,
     TableHead,
     TableCell,
-} from "../src/components/ui/table";
-import { Button } from "../src/components/ui/button";
-import { Input } from "../src/components/ui/input";
-import { IconButton } from "../src/components/ui/icon-button";
-import { Pagination } from "../src/components/ui/pagination";
-import { Filter, FilterRow, FilterValues } from "../src/components/common/Filter";
-import { DeleteConfirmationModal } from "../src/components/common/DeleteConfirmationModal";
+} from "../../../src/components/ui/table";
+import { Button } from "../../../src/components/ui/button";
+import { Input } from "../../../src/components/ui/input";
+import { IconButton } from "../../../src/components/ui/icon-button";
+import { Pagination } from "../../../src/components/ui/pagination";
+import { Filter, FilterRow, FilterValues } from "../../../src/components/common/Filter";
+import { DeleteConfirmationModal } from "../../../src/components/common/DeleteConfirmationModal";
 import {
     useAttributes,
     useCreateAttribute,
     useUpdateAttribute,
     useDeleteAttribute,
     useReorderAttributes,
-} from "../src/services/attributes/hooks/use-attributes";
-import { Attribute } from "../src/services/attributes/types/attribute.types";
+} from "../../../src/services/attributes/hooks/use-attributes";
+import { Attribute } from "../../../src/services/attributes/types/attribute.types";
 
 type EditMode = {
     id: number | "new";

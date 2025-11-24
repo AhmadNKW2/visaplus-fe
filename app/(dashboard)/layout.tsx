@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Lato, Almarai } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, Slide } from "react-toastify";
-import { QueryProvider } from "./src/providers/query-provider";
-import { AuthProvider } from "./src/contexts/auth.context";
-import { ProtectedRoute } from "./src/components/auth/ProtectedRoute";
-import { LayoutContent } from "./src/components/layout/LayoutContent";
+import { QueryProvider } from "../src/providers/query-provider";
+import { AuthProvider } from "../src/contexts/auth.context";
+import { ProtectedRoute } from "../src/components/auth/ProtectedRoute";
+import { LayoutContent } from "../src/components/layout/LayoutContent";
 
 const lato = Lato({
   variable: '--font-lato',
@@ -29,11 +29,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className="bg-primary" suppressHydrationWarning>
+    <html lang="en" dir="ltr" className="bg-primary" suppressHydrationWarning>
       <body
         className={`${lato.variable} ${almarai.variable} antialiased`}
       >

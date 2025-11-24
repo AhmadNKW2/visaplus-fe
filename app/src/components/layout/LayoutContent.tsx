@@ -12,9 +12,15 @@ export const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const pathname = usePathname();
-  const isLoginPage = pathname === "/login";
+  
+  // Remove locale prefix (e.g. /en or /ar) to check routes
+  const pathWithoutLocale = pathname.replace(/^\/(en|ar)/, "") || "/";
+  
+  const isLoginPage = pathWithoutLocale === "/admin/login";
+  const isLandingPage = pathWithoutLocale === "/";
+  const showSidebar = pathWithoutLocale.startsWith("/admin") && !isLoginPage;
 
-  if (isLoginPage) {
+  if (!showSidebar) {
     return <>{children}</>;
   }
 
