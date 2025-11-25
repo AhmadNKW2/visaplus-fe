@@ -101,13 +101,15 @@ export default function LandingPage() {
           {/* Sticky Search Bar - Visibility controlled by showStickySearch */}
           <div className={`order-3 sm:order-none w-full sm:w-auto sm:flex-1 max-w-md transition-all duration-500 ease-in-out ${showStickySearch ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8 pointer-events-none h-0 sm:h-auto overflow-hidden'}`}>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className={`absolute ${isRtl ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400`} />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
                 placeholder={t("Search countries...", "وين حابب تسافر؟")}
-                className="w-full py-2.5 pl-10 pr-4 rounded-full bg-gray-100 border-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className={`w-full py-3.5 rounded-full bg-gray-100 border-none focus:ring-2 focus:ring-blue-500 text-sm ${isRtl ? 'pr-10 pl-4' : 'pl-10 pr-4'}`}
+                dir={isRtl ? 'rtl' : 'ltr'}
               />
             </div>
           </div>
@@ -115,7 +117,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-4 shrink-0 order-1 sm:order-none sm:ml-0">
             <button
               onClick={() => setLanguage(language === "en" ? "ar" : "en")}
-              className="text-sm font-medium text-gray-600 hover:text-black transition-colors duration-300"
+              className="text-sm font-medium text-gray-600 hover:text-black active:text-black transition-colors duration-300"
             >
               {language === "en" ? "العربية" : "English"}
             </button>
@@ -140,7 +142,7 @@ export default function LandingPage() {
       </div>
 
       {/* Main Content */}
-      <main ref={resultsRef} className="max-w-7xl w-full mx-auto px-6 py-16">
+      <main ref={resultsRef} className="max-w-7xl w-full mx-auto px-6 py-16 scroll-mt-24">
         {/* ... (Rest of the component remains the same) ... */}
         <div className="flex justify-between items-end mb-8">
           <div>
@@ -148,7 +150,7 @@ export default function LandingPage() {
               {t("Available Destinations", "الوجهات المتاحة")}
             </h2>
             <p className="text-gray-500 mt-2">
-              {t("Select a country to view requirements and apply.", "اختر دولة لعرض المتطلبات والتقديم.")}
+              {t("Select a country to view and apply.", "اختر الدولة لعرض المعلومات.")}
             </p>
           </div>
           <div className="hidden md:block text-sm text-gray-400">

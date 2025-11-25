@@ -33,7 +33,7 @@ export const Footer = () => {
                             <a
                                 href={CONTACT_INFO.social.facebook}
                                 target="_blank"
-                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-blue-600 transition-colors"
+                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-blue-600 active:bg-blue-700 transition-colors"
                                 aria-label="Facebook"
                             >
                                 <Facebook className="w-5 h-5" />
@@ -41,14 +41,14 @@ export const Footer = () => {
                             <a
                                 href={CONTACT_INFO.social.instagram}
                                 target="_blank"
-                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-pink-600 transition-colors"
+                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-pink-600 active:bg-pink-700 transition-colors"
                                 aria-label="Instagram"
                             >
                                 <Instagram className="w-5 h-5" />
                             </a>
                             <a
                                 href="mailto:info@visaplus.com"
-                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-600 transition-colors"
+                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-600 active:bg-green-700 transition-colors"
                                 aria-label="Email"
                             >
                                 <Mail className="w-5 h-5" />
@@ -61,43 +61,54 @@ export const Footer = () => {
                         <h4 className="text-lg font-semibold">{t("Contact Us", "اتصل بنا")}</h4>
                         <div className="space-y-4">
                             <div className="flex items-center gap-4 group">
-                                <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-[#c02033] transition-colors duration-300">
+                                <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-[#c02033] active:bg-[#a01b2b] transition-colors duration-300">
                                     <Phone className="w-5 h-5" />
                                 </div>
                                 <div>
                                     <p className="text-xs text-blue-300 uppercase tracking-wider mb-0.5">{t("Phone 1", "هاتف 1")}</p>
-                                    <p className="font-medium hover:text-blue-200 transition-colors duration-300" dir="ltr">{CONTACT_INFO.phone}</p>
+                                    <p className="font-medium hover:text-blue-200 active:text-blue-300 transition-colors duration-300" dir="ltr">{CONTACT_INFO.phone}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4 group">
-                                <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-[#c02033] transition-colors duration-300">
+                                <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-[#c02033] active:bg-[#a01b2b] transition-colors duration-300">
                                     <Phone className="w-5 h-5" />
                                 </div>
                                 <div>
                                     <p className="text-xs text-blue-300 uppercase tracking-wider mb-0.5">{t("Phone 2", "هاتف 2")}</p>
-                                    <p className="font-medium hover:text-blue-200 transition-colors duration-300" dir="ltr">{CONTACT_INFO.phone2}</p>
+                                    <p className="font-medium hover:text-blue-200 active:text-blue-300 transition-colors duration-300" dir="ltr">{CONTACT_INFO.phone2}</p>
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-4 group">
-                                <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-[#c02033] transition-colors duration-300">
+                                <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-[#c02033] active:bg-[#a01b2b] transition-colors duration-300">
                                     <Mail className="w-5 h-5" />
                                 </div>
                                 <div>
                                     <p className="text-xs text-blue-300 uppercase tracking-wider mb-0.5">{t("Email", "البريد الإلكتروني")}</p>
-                                    <p className="font-medium hover:text-blue-200 transition-colors duration-300">{CONTACT_INFO.email}</p>
+                                    <p className="font-medium hover:text-blue-200 active:text-blue-300 transition-colors duration-300">{CONTACT_INFO.email}</p>
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-4 group">
-                                <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-[#c02033] transition-colors duration-300">
+                                <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-[#c02033] active:bg-[#a01b2b] transition-colors duration-300">
                                     <MapPin className="w-5 h-5" />
                                 </div>
                                 <div>
                                     <p className="text-xs text-blue-300 uppercase tracking-wider mb-0.5">{t("Location", "الموقع")}</p>
-                                    <p className="font-medium hover:text-blue-200 transition-colors duration-300">
-                                        {language === 'ar' ? CONTACT_INFO.location.ar : CONTACT_INFO.location.en}
-                                    </p>
+                                    <div className="flex items-center gap-2">
+                                        <p className="font-medium hover:text-blue-200 active:text-blue-300 transition-colors duration-300">
+                                            {language === 'ar' ? CONTACT_INFO.location.ar : CONTACT_INFO.location.en}
+                                        </p>
+                                        <a
+                                            href="https://maps.app.goo.gl/NUJW1UVJ6Xp24Mq87"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-3 py-1 rounded-full text-xs font-medium transition-colors duration-300 flex items-center gap-1"
+                                        >
+                                            <MapPin className="w-3 h-3" />
+                                            {t("Map", "الخريطة")}
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -108,8 +119,7 @@ export const Footer = () => {
                         <h4 className="text-lg font-semibold">{t("Quick Links", "روابط سريعة")}</h4>
                         <ul className="space-y-3 text-blue-200 text-sm">
                             <li><a href="#" className="hover:text-white transition-colors duration-300">{t("About Us", "من نحن")}</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors duration-300">{t("Privacy Policy", "سياسة الخصوصية")}</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors duration-300">{t("Terms of Service", "شروط الخدمة")}</a></li>
+                            <li><a href="#" className="hover:text-white transition-colors duration-300">{t("FAQs", "أسئلة وأجوبة")}</a></li>
                         </ul>
                     </div>
                 </div>

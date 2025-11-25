@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Phone, X, MessageCircle } from "lucide-react";
+import { CONTACT_INFO } from "../../lib/contact-info";
 
 export const FloatingContactButtons = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +33,7 @@ export const FloatingContactButtons = () => {
           <div className="flex flex-col gap-3 mb-3 items-center">
             {/* WhatsApp Button */}
             <motion.a
-              href="https://wa.me/1234567890" // Replace with actual number
+              href={`https://wa.me/${CONTACT_INFO.whatsappPhone}`} // Replace with actual number
               target="_blank"
               rel="noopener noreferrer"
               custom={1}
@@ -50,7 +51,7 @@ export const FloatingContactButtons = () => {
 
             {/* Call Button */}
             <motion.a
-              href="tel:+1234567890" // Replace with actual number
+              href={`tel:${CONTACT_INFO.whatsappPhone}`} // Replace with actual number
               custom={0}
               initial="hidden"
               animate="visible"

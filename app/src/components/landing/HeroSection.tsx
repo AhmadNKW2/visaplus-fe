@@ -51,20 +51,21 @@ export const HeroSection = ({ searchQuery, setSearchQuery, searchRef, onSearchSu
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="relative max-w-2xl mx-auto"
                 >
-                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-400">
+                    <div className={`absolute inset-y-0 ${isRtl ? 'right-4' : 'left-4'} flex items-center pointer-events-none text-gray-400 z-10`}>
                         <Search className="w-5 h-5" />
                     </div>
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && onSearchSubmit?.()}
                         placeholder={t("Where do you want to go?", "وين حابب تسافر؟")}
                         className={`w-full py-3.5 pl-12 pr-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white/20 transition-all text-lg shadow-xl ${isRtl ? 'text-right pr-12 pl-6' : ''}`}
                         dir={isRtl ? 'rtl' : 'ltr'}
                     />
                     <button 
                         onClick={onSearchSubmit}
-                        className={`absolute ${isRtl ? 'left-2' : 'right-2'} top-2 bottom-2 bg-blue-600 hover:bg-blue-700 text-white px-8 rounded-full font-medium transition-colors duration-300 flex items-center gap-2`}
+                        className={`absolute ${isRtl ? 'left-2' : 'right-2'} top-2 bottom-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-8 rounded-full font-medium transition-colors duration-300 flex items-center gap-2`}
                     >
                         {t("Search", "بحث")}
                     </button>

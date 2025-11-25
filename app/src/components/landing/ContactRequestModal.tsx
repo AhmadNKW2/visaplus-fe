@@ -127,7 +127,7 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
                     </div>
 
                     <div className="relative z-10 text-xs text-white/40">
-                        © {new Date().getFullYear()} VisaPlus Inc.
+                        © {new Date().getFullYear()} VisaPlus Inc
                     </div>
                 </div>
 

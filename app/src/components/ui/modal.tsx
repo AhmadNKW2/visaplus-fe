@@ -7,6 +7,7 @@
 
 import React, { useEffect, useState } from "react";
 import { IconButton } from "./icon-button";
+import { useLanguage } from "../../contexts/language.context";
 
 interface ModalProps {
   isOpen: boolean;
@@ -26,6 +27,8 @@ export const Modal: React.FC<ModalProps> = ({
   className = "",
   variant = 'default',
 }) => {
+  const { language } = useLanguage();
+  const isRtl = language === 'ar';
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -103,14 +106,15 @@ export const Modal: React.FC<ModalProps> = ({
             : 'opacity-0 scale-95 -translate-y-4'
         } ${className}`}
         onClick={(e) => e.stopPropagation()}
-      >
-
+        >
         {/* Content */}
         <IconButton
           onClick={onClose}
           variant="cancel"
-          className="absolute top-3 right-3"
+          className={`absolute top-3 ${isRtl ? 'left-3' : 'right-3'}`}
         />
+
+        {/* Content */}
 
         {/* Content */}
         {children}
