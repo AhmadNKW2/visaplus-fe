@@ -8,6 +8,8 @@ import { AuthProvider } from "../../src/contexts/auth.context";
 import { LanguageProvider } from "../../src/contexts/language.context";
 import { ProtectedRoute } from "../../src/components/auth/ProtectedRoute";
 import { LayoutContent } from "../../src/components/layout/LayoutContent";
+import { FloatingContactButtons } from "../../src/components/layout/FloatingContactButtons";
+import { Footer } from "../../src/components/layout/Footer";
 
 const lato = Lato({
   variable: '--font-lato',
@@ -26,6 +28,9 @@ const almarai = Almarai({
 export const metadata: Metadata = {
   title: "Visaplus Admin Dashboard",
   description: "Admin dashboard for Visaplus management system",
+  icons: {
+    icon: "/Logo-Icon.svg",
+  },
 };
 
 export async function generateStaticParams() {
@@ -65,7 +70,11 @@ export default async function RootLayout({
           <QueryProvider>
             <AuthProvider>
               <ProtectedRoute>
-                <LayoutContent>{children}</LayoutContent>
+                <LayoutContent>
+                  {children}
+                  <FloatingContactButtons />
+                  <Footer />
+                </LayoutContent>
               </ProtectedRoute>
             </AuthProvider>
           </QueryProvider>

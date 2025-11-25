@@ -88,13 +88,14 @@ function SortableRow({
             <TableCell>{country.id}</TableCell>
             <TableCell>
                 {country.countryWorld?.image_url && (
-                    <Image
-                        src={country.countryWorld.image_url}
-                        alt={country.countryWorld.name_en}
-                        width={80}
-                        height={60}
-                        className="rounded"
-                    />
+                    <div className="relative h-12 w-20">
+                        <Image
+                            src={country.countryWorld.image_url}
+                            alt={country.countryWorld.name_en}
+                            fill
+                            className="rounded object-cover"
+                        />
+                    </div>
                 )}
             </TableCell>
             <TableCell>{country.countryWorld?.name_en || "-"}</TableCell>
@@ -283,53 +284,53 @@ export default function CountriesPage() {
                         collisionDetection={closestCenter}
                         onDragEnd={handleDragEnd}
                     >
-                    <SortableContext
-                        items={localCountries.map((c) => c.id)}
-                        strategy={verticalListSortingStrategy}
-                    >
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead width="5%">Order</TableHead>
-                                    <TableHead width="10%">ID</TableHead>
-                                    <TableHead width="20%">Flag</TableHead>
-                                    <TableHead width="25%">Name (English)</TableHead>
-                                    <TableHead width="20%">Name (Arabic)</TableHead>
-                                    <TableHead width="20%">Actions</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {localCountries.map((country: Country) => (
-                                    <SortableRow
-                                        key={country.id}
-                                        country={country}
-                                        onEdit={() => handleEdit(country.id)}
-                                        onDelete={() => handleDeleteClick(country)}
-                                        isDeleting={deleteMutation.isPending}
-                                    />
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </SortableContext>
-                </DndContext>
+                        <SortableContext
+                            items={localCountries.map((c) => c.id)}
+                            strategy={verticalListSortingStrategy}
+                        >
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead width="5%">Order</TableHead>
+                                        <TableHead width="10%">ID</TableHead>
+                                        <TableHead width="20%">Flag</TableHead>
+                                        <TableHead width="25%">Name (English)</TableHead>
+                                        <TableHead width="20%">Name (Arabic)</TableHead>
+                                        <TableHead width="20%">Actions</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {localCountries.map((country: Country) => (
+                                        <SortableRow
+                                            key={country.id}
+                                            country={country}
+                                            onEdit={() => handleEdit(country.id)}
+                                            onDelete={() => handleDeleteClick(country)}
+                                            isDeleting={deleteMutation.isPending}
+                                        />
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </SortableContext>
+                    </DndContext>
 
-                {/* Pagination */}
-                <div className="mt-6">
-                    <Pagination
-                        pagination={{
-                            currentPage: meta.page || currentPage,
-                            pageSize: meta.limit || pageSize,
-                            totalItems: meta.total || 0,
-                            totalPages: meta.totalPages || 1,
-                            hasNextPage: meta.hasNextPage || false,
-                            hasPreviousPage: meta.hasPreviousPage || false,
-                        }}
-                        onPageChange={handlePageChange}
-                        onPageSizeChange={handlePageSizeChange}
-                        showPageSize={true}
-                    />
-                </div>
-            </>
+                    {/* Pagination */}
+                    <div className="mt-6">
+                        <Pagination
+                            pagination={{
+                                currentPage: meta.page || currentPage,
+                                pageSize: meta.limit || pageSize,
+                                totalItems: meta.total || 0,
+                                totalPages: meta.totalPages || 1,
+                                hasNextPage: meta.hasNextPage || false,
+                                hasPreviousPage: meta.hasPreviousPage || false,
+                            }}
+                            onPageChange={handlePageChange}
+                            onPageSizeChange={handlePageSizeChange}
+                            showPageSize={true}
+                        />
+                    </div>
+                </>
             ) : (
                 <div className="flex flex-col items-center justify-center py-12">
                     <p className="text-gray-500 text-lg mb-4">No countries found</p>

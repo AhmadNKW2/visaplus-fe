@@ -32,10 +32,44 @@ export default function EditCountryPage() {
             return;
         }
 
+        // Calculate only changed values
+        const changedData: any = {};
+        
+        // Check if countryWorldId changed
+        if (country.countryWorldId !== data.countryWorldId) {
+            changedData.countryWorldId = data.countryWorldId;
+        }
+
+        // Check if attributes changed
+        const changedAttributes = data.attributes.filter((newAttr: any) => {
+            const oldAttr = country.attributes?.find(
+                (attr: any) => attr.attributeId === newAttr.attributeId
+            );
+            
+            if (!oldAttr) return true; // New attribute
+            
+            // Check if any field changed
+            return (
+                oldAttr.value_en !== newAttr.value_en ||
+                oldAttr.value_ar !== newAttr.value_ar ||
+                oldAttr.isActive !== newAttr.isActive
+            );
+        });
+
+        if (changedAttributes.length > 0) {
+            changedData.attributes = changedAttributes;
+        }
+
+        // Only send PATCH if there are actual changes
+        if (Object.keys(changedData).length === 0) {
+            router.push("/admin/countries");
+            return;
+        }
+
         try {
             await updateMutation.mutateAsync({
                 id: countryId,
-                data,
+                data: changedData,
             });
             router.push("/admin/countries");
         } catch (error: any) {
@@ -47,7 +81,7 @@ export default function EditCountryPage() {
         router.push("/admin/countries");
     };
 
-    if (isLoadingCountry || isLoadingCountries || isLoadingAttributes) {
+    if (isLoadingCountry || isLoadingAttributes) {
         return (
             <div className="p-8">
                 <div className="flex items-center justify-center h-64">

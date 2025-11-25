@@ -110,7 +110,7 @@ export const getFieldClassesBySize = (
     if (size === 'sm') {
         const rightPadding = hasRightIcon ? 'pr-7' : 'pr-2';
         const leftPadding = hasLeftIcon ? 'pl-7' : 'pl-2';
-        return `${className || ''} ${FIELD_BASE_CLASSES} w-20 h-11 p-1 ${leftPadding} ${rightPadding} text-base ${borderColor}`;
+        return `${className || ''} ${FIELD_BASE_CLASSES} w-20 py-2.5 px-1 ${leftPadding} ${rightPadding} text-base ${borderColor}`;
     }
 
     // Default size

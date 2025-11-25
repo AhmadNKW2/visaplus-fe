@@ -10,9 +10,10 @@ interface HeroSectionProps {
     setSearchQuery: (query: string) => void;
     // Updated type to allow null, matching standard useRef behavior
     searchRef: RefObject<HTMLDivElement | null>;
+    onSearchSubmit?: () => void;
 }
 
-export const HeroSection = ({ searchQuery, setSearchQuery, searchRef }: HeroSectionProps) => {
+export const HeroSection = ({ searchQuery, setSearchQuery, searchRef, onSearchSubmit }: HeroSectionProps) => {
     const { t, language } = useLanguage();
     const isRtl = language === 'ar';
 
@@ -57,10 +58,16 @@ export const HeroSection = ({ searchQuery, setSearchQuery, searchRef }: HeroSect
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder={t("Where do you want to go?", "إلى أين تريد الذهاب؟")}
-                        className={`w-full h-14 pl-12 pr-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white/20 transition-all text-lg shadow-xl ${isRtl ? 'text-right pr-12 pl-6' : ''}`}
+                        placeholder={t("Where do you want to go?", "وين حابب تسافر؟")}
+                        className={`w-full py-3.5 pl-12 pr-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white/20 transition-all text-lg shadow-xl ${isRtl ? 'text-right pr-12 pl-6' : ''}`}
                         dir={isRtl ? 'rtl' : 'ltr'}
                     />
+                    <button 
+                        onClick={onSearchSubmit}
+                        className={`absolute ${isRtl ? 'left-2' : 'right-2'} top-2 bottom-2 bg-blue-600 hover:bg-blue-700 text-white px-8 rounded-full font-medium transition-colors duration-300 flex items-center gap-2`}
+                    >
+                        {t("Search", "بحث")}
+                    </button>
                 </motion.div>
             </div>
         </div>

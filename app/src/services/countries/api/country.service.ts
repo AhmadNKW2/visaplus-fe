@@ -82,8 +82,11 @@ class CountryService extends BaseService<Country> {
   /**
    * Get all countries from world database
    */
-  async getCountriesWorld(): Promise<ApiResponse<CountryWorld[]>> {
-    return httpClient.get<ApiResponse<CountryWorld[]>>("/countries-world");
+  async getCountriesWorld(params?: { search?: string }): Promise<ApiResponse<CountryWorld[]>> {
+    const queryParams: Record<string, string> = {};
+    if (params?.search) queryParams.search = params.search;
+    
+    return httpClient.get<ApiResponse<CountryWorld[]>>("/countries-world", queryParams);
   }
 }
 

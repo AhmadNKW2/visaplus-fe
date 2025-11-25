@@ -9,6 +9,7 @@ import CountryCard from "./CountryCard";
 import { HeroSection } from "./HeroSection";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, Phone, Mail, MapPin } from "lucide-react";
+import Image from "next/image";
 
 export default function LandingPage() {
   const { language, setLanguage, t } = useLanguage();
@@ -21,9 +22,24 @@ export default function LandingPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openCountryId, setOpenCountryId] = useState<number | null>(null);
   const [showStickySearch, setShowStickySearch] = useState(false);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // Create a ref specific to the search input container
   const searchRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  const handleSearchSubmit = () => {
+    if (resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,8 +62,9 @@ export default function LandingPage() {
 
   useEffect(() => {
     const fetchCountries = async () => {
+      setLoading(true);
       try {
-        const response = await publicService.getCountries();
+        const response = await publicService.getCountries(debouncedSearch);
         if (response.success) {
           const sorted = response.data.sort((a, b) => a.order - b.order);
           setCountries(sorted);
@@ -60,15 +77,7 @@ export default function LandingPage() {
       }
     };
     fetchCountries();
-  }, []);
-
-  useEffect(() => {
-    const filtered = countries.filter((c) =>
-      c.countryWorld.name_en.toLowerCase().includes(search.toLowerCase()) ||
-      c.countryWorld.name_ar.includes(search)
-    );
-    setFilteredCountries(filtered);
-  }, [search, countries]);
+  }, [debouncedSearch]);
 
   const handleApply = (country: PublicCountry) => {
     setSelectedCountry(country);
@@ -79,28 +88,31 @@ export default function LandingPage() {
     <div className={`min-h-screen bg-gray-50 font-lato ${language === 'ar' ? 'font-almarai' : ''}`}>
 
       {/* Navigation Bar (Glassmorphic) */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-sm border-b border-gray-200/50 transition-all duration-300 h-20">
-        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">V</div>
-            <span className="text-xl font-bold text-slate-900 tracking-tight hidden sm:block">VisaPlus</span>
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-sm border-b border-gray-200/50 transition-all duration-300 h-auto min-h-[80px]">
+        <div className={`max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between ${showStickySearch ? 'gap-4' : ''}`}>
+          <div className="relative w-37 h-10 max-[400]:w-30">
+            <Image
+              fill
+              src="/Logo.svg"
+              alt="VisaPlus Logo"
+            />
           </div>
 
           {/* Sticky Search Bar - Visibility controlled by showStickySearch */}
-          <div className={`flex-1 max-w-md transition-all duration-500 ease-in-out ${showStickySearch ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8 pointer-events-none'}`}>
+          <div className={`order-3 sm:order-none w-full sm:w-auto sm:flex-1 max-w-md transition-all duration-500 ease-in-out ${showStickySearch ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8 pointer-events-none h-0 sm:h-auto overflow-hidden'}`}>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder={t("Search countries...", "ابحث عن دول...")}
-                className="w-full h-10 pl-10 pr-4 rounded-full bg-gray-100 border-none focus:ring-2 focus:ring-blue-500 text-sm"
+                placeholder={t("Search countries...", "وين حابب تسافر؟")}
+                className="w-full py-2.5 pl-10 pr-4 rounded-full bg-gray-100 border-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
           </div>
 
-          <div className="flex items-center gap-4 shrink-0">
+          <div className="flex items-center gap-4 shrink-0 order-1 sm:order-none sm:ml-0">
             <button
               onClick={() => setLanguage(language === "en" ? "ar" : "en")}
               className="text-sm font-medium text-gray-600 hover:text-black transition-colors duration-300"
@@ -109,7 +121,7 @@ export default function LandingPage() {
             </button>
             <Button
               onClick={() => { setSelectedCountry(undefined); setIsModalOpen(true); }}
-              className="bg-slate-900 hover:bg-slate-800 transition-colors duration-300 rounded-full px-6"
+              color="#c02033"
             >
               {t("Contact Us", "اتصل بنا")}
             </Button>
@@ -123,11 +135,12 @@ export default function LandingPage() {
           searchQuery={search}
           setSearchQuery={setSearch}
           searchRef={searchRef}
+          onSearchSubmit={handleSearchSubmit}
         />
       </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl w-full mx-auto px-6 py-16">
+      <main ref={resultsRef} className="max-w-7xl w-full mx-auto px-6 py-16">
         {/* ... (Rest of the component remains the same) ... */}
         <div className="flex justify-between items-end mb-8">
           <div>
@@ -178,77 +191,6 @@ export default function LandingPage() {
           </div>
         )}
       </main>
-
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white p-16 pb-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-            {/* Brand */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">V</div>
-                <span className="text-xl font-bold tracking-tight">VisaPlus</span>
-              </div>
-              <p className="text-blue-200 text-sm leading-relaxed max-w-xs">
-                {t(
-                  "Your trusted partner for visa assistance. We make your travel dreams a reality with professional and fast service.",
-                  "شريكك الموثوق للمساعدة في التأشيرة. نجعل أحلام سفرك حقيقة بخدمة احترافية وسريعة."
-                )}
-              </p>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-6">
-              <h4 className="text-lg font-semibold">{t("Contact Us", "اتصل بنا")}</h4>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 group">
-                  <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-blue-600 transition-colors duration-300">
-                    <Phone className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-blue-300 uppercase tracking-wider mb-0.5">{t("Phone", "الهاتف")}</p>
-                    <p className="font-medium hover:text-blue-200 transition-colors duration-300" dir="ltr">+965 1234 5678</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-4 group">
-                  <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-blue-600 transition-colors duration-300">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-blue-300 uppercase tracking-wider mb-0.5">{t("Email", "البريد")}</p>
-                    <p className="font-medium hover:text-blue-200 transition-colors duration-300">info@visaplus.com</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 group">
-                  <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-blue-600 transition-colors duration-300">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-blue-300 uppercase tracking-wider mb-0.5">{t("Location", "الموقع")}</p>
-                    <p className="font-medium hover:text-blue-200 transition-colors duration-300">{t("Kuwait City, Kuwait", "مدينة الكويت، الكويت")}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Links or Newsletter (Optional placeholder) */}
-            <div className="space-y-6">
-              <h4 className="text-lg font-semibold">{t("Quick Links", "روابط سريعة")}</h4>
-              <ul className="space-y-3 text-blue-200 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors duration-300">{t("About Us", "من نحن")}</a></li>
-                <li><a href="#" className="hover:text-white transition-colors duration-300">{t("Privacy Policy", "سياسة الخصوصية")}</a></li>
-                <li><a href="#" className="hover:text-white transition-colors duration-300">{t("Terms of Service", "شروط الخدمة")}</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="pt-8 border-t border-white/10 text-center text-blue-300/60 text-sm">
-            <p>&copy; {new Date().getFullYear()} VisaPlus. {t("All rights reserved.", "جميع الحقوق محفوظة.")}</p>
-          </div>
-        </div>
-      </footer>
 
       <ContactRequestModal
         isOpen={isModalOpen}

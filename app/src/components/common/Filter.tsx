@@ -59,7 +59,7 @@ export const Filter: React.FC<FilterProps> = ({
       if (searchValue !== values.search) {
         onFilterChange({ ...values, search: searchValue });
       }
-    }, 750); // 300ms debounce
+    }, 500); // 300ms debounce
 
     return () => clearTimeout(timer);
   }, [searchValue, values, onFilterChange]);

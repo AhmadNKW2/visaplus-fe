@@ -11,6 +11,32 @@ import {
   ReorderCountryDto,
 } from "../types/country.types";
 
+const selectCountriesData = (response: any) => {
+  // API returns nested structure: response.data.data
+  const data = response.data as any;
+  
+  // Handle various response structures
+  let items: any[] = [];
+  let meta: any = {};
+  
+  if (data && typeof data === 'object') {
+    // Check for nested data property (data.data)
+    if ('data' in data && Array.isArray(data.data)) {
+      items = data.data;
+      meta = data.meta || {};
+    }
+    // Check if data itself is an array
+    else if (Array.isArray(data)) {
+      items = data;
+    }
+  }
+  
+  return {
+    items,
+    meta,
+  };
+};
+
 /**
  * Get all countries
  */
@@ -21,39 +47,10 @@ export const useCountries = (params?: {
   search?: string;
 }) => {
   return useQuery({
-    queryKey: [...queryKeys.countries.all, params],
+    queryKey: queryKeys.countries.list(params),
     queryFn: () => countryService.getCountries(params),
     placeholderData: (previousData) => previousData, // Keep previous data while loading
-    select: (response) => {
-      console.log('Countries API Response:', response); // Debug log
-      
-      // API returns nested structure: response.data.data
-      const data = response.data as any;
-      
-      // Handle various response structures
-      let items: any[] = [];
-      let meta: any = {};
-      
-      if (data && typeof data === 'object') {
-        // Check for nested data property (data.data)
-        if ('data' in data && Array.isArray(data.data)) {
-          items = data.data;
-          meta = data.meta || {};
-        }
-        // Check if data itself is an array
-        else if (Array.isArray(data)) {
-          items = data;
-        }
-      }
-      
-      console.log('Extracted countries:', items); // Debug log
-      console.log('Extracted meta:', meta); // Debug log
-      
-      return {
-        items,
-        meta,
-      };
-    },
+    select: selectCountriesData,
   });
 };
 
@@ -75,16 +72,17 @@ export const useCountry = (id: number) => {
       return data;
     },
     enabled: !!id,
+    staleTime: 0, // Always fetch fresh data when mounting
   });
 };
 
 /**
  * Get all countries world
  */
-export const useCountriesWorld = () => {
+export const useCountriesWorld = (params?: { search?: string }) => {
   return useQuery({
-    queryKey: [...queryKeys.countries.world],
-    queryFn: () => countryService.getCountriesWorld(),
+    queryKey: [queryKeys.countries.world, params],
+    queryFn: () => countryService.getCountriesWorld(params),
     select: (response) => {
       // API returns nested structure: response.data.data
       const data = response.data as any;
@@ -108,7 +106,7 @@ export const useCreateCountry = () => {
     mutationFn: (data: CreateCountryDto) =>
       countryService.createCountry(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.countries.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.countries.lists() });
     },
   });
 };
@@ -122,11 +120,8 @@ export const useUpdateCountry = () => {
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: UpdateCountryDto }) =>
       countryService.updateCountry(id, data),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.countries.all });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.countries.detail(variables.id),
-      });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.countries.lists() });
     },
   });
 };
@@ -140,7 +135,7 @@ export const useDeleteCountry = () => {
   return useMutation({
     mutationFn: (id: number) => countryService.deleteCountry(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.countries.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.countries.lists() });
     },
   });
 };
@@ -155,7 +150,7 @@ export const useReorderCountries = () => {
     mutationFn: (data: ReorderCountryDto) =>
       countryService.reorderCountries(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.countries.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.countries.lists() });
     },
   });
 };

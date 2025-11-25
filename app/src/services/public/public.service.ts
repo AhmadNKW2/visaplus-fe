@@ -52,8 +52,15 @@ export interface PublicCountriesResponse {
 }
 
 export const publicService = {
-  getCountries: async (): Promise<PublicCountriesResponse> => {
-    const response = await fetch(`${API_CONFIG.baseUrl}/countries`, {
+  getCountries: async (search?: string): Promise<PublicCountriesResponse> => {
+    const queryParams = new URLSearchParams();
+    if (search) {
+      queryParams.append("search", search);
+    }
+    const queryString = queryParams.toString();
+    const url = `${API_CONFIG.baseUrl}/countries${queryString ? `?${queryString}` : ""}`;
+
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

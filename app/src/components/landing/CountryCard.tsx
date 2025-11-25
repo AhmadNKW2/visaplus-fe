@@ -94,12 +94,13 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
                   )}
                 </div>
 
-                <Button 
-                  className="w-full bg-fifth text-black hover:bg-blue-50 transition-colors duration-300 gap-2 group/btn"
+                <Button
+                  className="w-full gap-2 group/btn"
                   onClick={(e) => {
                     e.stopPropagation();
                     onApply();
                   }}
+                  color="#c02033"
                 >
                   {t("Start Application", "ابدأ الطلب")}
                 </Button>

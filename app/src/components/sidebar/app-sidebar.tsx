@@ -58,15 +58,10 @@ export function AppSidebar({ groups, header, footer }: AppSidebarProps) {
     <Sidebar>
       {header && (
         <SidebarHeader>
-          <div className="flex items-center gap-3">
-            {header.logo}
-            <div>
-              <h1 className="text-xl font-bold text-third">{header.title}</h1>
-              {header.subtitle && <p className="text-xs text-gray-500">{header.subtitle}</p>}
-            </div>
-          </div>
-        </SidebarHeader>
-      )}
+          {header.logo}
+        </SidebarHeader >
+      )
+      }
 
       <SidebarContent>
         {groups.map((group, groupIndex) => {
@@ -96,26 +91,28 @@ export function AppSidebar({ groups, header, footer }: AppSidebarProps) {
         })}
       </SidebarContent>
 
-      {footer && user && (
-        <SidebarFooter>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-fourth flex items-center justify-center text-secondary font-bold">
-              {user.firstName.charAt(0).toUpperCase()}{user.lastName.charAt(0).toUpperCase()}
+      {
+        footer && user && (
+          <SidebarFooter>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-fourth flex items-center justify-center text-secondary font-bold">
+                {user.firstName.charAt(0).toUpperCase()}{user.lastName.charAt(0).toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-third truncate">
+                  {user.firstName} {user.lastName}
+                </p>
+                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+              </div>
+              <IconButton
+                onClick={handleLogout}
+                variant="logout"
+                title="Logout"
+              />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-third truncate">
-                {user.firstName} {user.lastName}
-              </p>
-              <p className="text-xs text-gray-500 truncate">{user.email}</p>
-            </div>
-            <IconButton
-              onClick={handleLogout}
-              variant="logout"
-              title="Logout"
-            />
-          </div>
-        </SidebarFooter>
-      )}
-    </Sidebar>
+          </SidebarFooter>
+        )
+      }
+    </Sidebar >
   );
 }

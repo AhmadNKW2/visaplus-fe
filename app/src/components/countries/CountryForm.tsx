@@ -103,14 +103,15 @@ export const CountryForm: React.FC<CountryFormProps> = ({
     // Ensure countriesWorld is an array before using array methods
     const safeCountriesWorld = Array.isArray(countriesWorld) ? countriesWorld : [];
 
+    // Memoize country options to prevent unnecessary re-renders
+    const countryOptions: SelectOption[] = useMemo(() => safeCountriesWorld.map((country) => ({
+        value: country.id.toString(),
+        label: `${country.name_en} - ${country.name_ar}`,
+    })), [safeCountriesWorld]);
+
     const selectedCountry = safeCountriesWorld.find(
         (c) => c.id.toString() === selectedCountryWorldId
     );
-
-    const countryOptions: SelectOption[] = safeCountriesWorld.map((country) => ({
-        value: country.id.toString(),
-        label: `${country.name_en} - ${country.name_ar}`,
-    }));
 
     const handleAttributeChange = (
         attributeId: number,
@@ -225,13 +226,14 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                     {selectedCountry && (
                         <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                             {selectedCountry.image_url && (
-                                <Image
-                                    src={selectedCountry.image_url}
-                                    alt={selectedCountry.name_en}
-                                    width={80}
-                                    height={50}
-                                    className="rounded"
-                                />
+                                <div className="relative w-20 h-12">
+                                    <Image
+                                        src={selectedCountry.image_url}
+                                        alt={selectedCountry.name_en}
+                                        fill
+                                        className="object-cover rounded-md"
+                                    />
+                                </div>
                             )}
                             <div>
                                 <p className="font-medium text-gray-900">

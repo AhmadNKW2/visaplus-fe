@@ -19,13 +19,14 @@ interface SelectProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChan
   placeholder?: string;
   disabled?: boolean;
   search?: boolean;
+  onSearchChange?: (query: string) => void;
   multiple?: boolean;
   size?: 'default' | 'sm';
   name?: string;
 }
 
 export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
-  ({ label, error, className = '', value, onChange, onClear, options, placeholder, disabled = false, search = true, multiple = false, size = 'default', ...props }, ref) => {
+  ({ label, error, className = '', value, onChange, onClear, options, placeholder, disabled = false, search = true, onSearchChange, multiple = false, size = 'default', ...props }, ref) => {
     const [isFocused, setIsFocused] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -55,11 +56,18 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     const displayValue = getDisplayValue();
 
     // Filter options based on search query
-    const filteredOptions = search && searchQuery
+    // If onSearchChange is provided, we assume external filtering
+    const filteredOptions = search && searchQuery && !onSearchChange
       ? options.filter(opt =>
         opt.label.toLowerCase().includes(searchQuery.toLowerCase())
       )
       : options;
+
+    useEffect(() => {
+      if (onSearchChange) {
+        onSearchChange(searchQuery);
+      }
+    }, [searchQuery, onSearchChange]);
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
@@ -170,7 +178,9 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     };
 
     const handleSearchKeyDown = (e: React.KeyboardEvent) => {
-      if (e.key === 'ArrowDown') {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+      } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         const firstOption = containerRef.current?.querySelector('[role="option"]:not([aria-disabled="true"])') as HTMLElement;
         firstOption?.focus();

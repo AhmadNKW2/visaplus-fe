@@ -11,6 +11,32 @@ import {
   ReorderAttributeDto,
 } from "../types/attribute.types";
 
+const selectAttributesData = (response: any) => {
+  // API returns nested data structure: data.data
+  const data = response.data as any;
+  
+  // Handle various response structures
+  let items: any[] = [];
+  let meta: any = {};
+  
+  if (data && typeof data === 'object') {
+    // Check for nested data property (data.data)
+    if ('data' in data && Array.isArray(data.data)) {
+      items = data.data;
+      meta = data.meta || {};
+    }
+    // Check if data itself is an array
+    else if (Array.isArray(data)) {
+      items = data;
+    }
+  }
+  
+  return {
+    items,
+    meta,
+  };
+};
+
 /**
  * Get all attributes
  */
@@ -24,36 +50,7 @@ export const useAttributes = (params?: {
     queryKey: [...queryKeys.attributes.all, params],
     queryFn: () => attributeService.getAttributes(params),
     placeholderData: (previousData) => previousData, // Keep previous data while loading
-    select: (response) => {
-      console.log('Attributes API Response:', response); // Debug log
-      
-      // API returns nested data structure: data.data
-      const data = response.data as any;
-      
-      // Handle various response structures
-      let items: any[] = [];
-      let meta: any = {};
-      
-      if (data && typeof data === 'object') {
-        // Check for nested data property (data.data)
-        if ('data' in data && Array.isArray(data.data)) {
-          items = data.data;
-          meta = data.meta || {};
-        }
-        // Check if data itself is an array
-        else if (Array.isArray(data)) {
-          items = data;
-        }
-      }
-      
-      console.log('Extracted attributes:', items); // Debug log
-      console.log('Extracted meta:', meta); // Debug log
-      
-      return {
-        items,
-        meta,
-      };
-    },
+    select: selectAttributesData,
   });
 };
 

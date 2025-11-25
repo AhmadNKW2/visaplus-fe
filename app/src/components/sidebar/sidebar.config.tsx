@@ -1,11 +1,16 @@
+import Image from "next/image";
+
 export const sidebarConfig = {
   header: {
     title: 'Admin Panel',
     subtitle: '',
     logo: (
-      <div className="text-2xl font-bold text-fourth">
-        VP
-      </div>
+      <Image
+        width={150}
+        height={40}
+        src="/Logo.svg"
+        alt="VisaPlus Logo"
+      />
     ),
   },
   footer: {

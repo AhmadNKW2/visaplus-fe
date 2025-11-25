@@ -9,6 +9,7 @@ import { contactRequestService } from "../../services/contact-requests/api/conta
 import { Phone, Mail, MapPin, CheckCircle2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Country } from "../../services/countries/types/country.types";
+import { CONTACT_INFO } from "../../lib/contact-info";
 
 interface ContactRequestModalProps {
     isOpen: boolean;
@@ -94,15 +95,33 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
                         <div className="flex items-center gap-4 group">
                             <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-blue-600 transition-colors duration-300"><Phone className="w-5 h-5" /></div>
                             <div>
-                                <p className="text-xs text-blue-200 uppercase tracking-wider">{t("Phone", "الهاتف")}</p>
-                                <p className="font-medium">+965 1234 5678</p>
+                                <p className="text-xs text-blue-200 uppercase tracking-wider">{t("Phone 1", "هاتف 1")}</p>
+                                <p className="font-medium" dir="ltr">{CONTACT_INFO.phone}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-4 group">
+                            <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-blue-600 transition-colors duration-300"><Phone className="w-5 h-5" /></div>
+                            <div>
+                                <p className="text-xs text-blue-200 uppercase tracking-wider">{t("Phone 2", "هاتف 2")}</p>
+                                <p className="font-medium" dir="ltr">{CONTACT_INFO.phone2}</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-4 group">
                             <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-blue-600 transition-colors duration-300"><Mail className="w-5 h-5" /></div>
                             <div>
-                                <p className="text-xs text-blue-200 uppercase tracking-wider">{t("Email", "البريد")}</p>
-                                <p className="font-medium">info@visaplus.com</p>
+                                <p className="text-xs text-blue-200 uppercase tracking-wider">{t("Email", "البريد الإلكتروني")}</p>
+                                <p className="font-medium">{CONTACT_INFO.email}</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-4 group">
+                            <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-blue-600 transition-colors duration-300"><MapPin className="w-5 h-5" /></div>
+                            <div>
+                                <p className="text-xs text-blue-200 uppercase tracking-wider">{t("Location", "الموقع")}</p>
+                                <p className="font-medium">
+                                    {language === 'ar' ? CONTACT_INFO.location.ar : CONTACT_INFO.location.en}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -203,7 +222,11 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
                                     </div>
 
                                     <div className="pt-4">
-                                        <Button type="submit" className="w-full h-[52px]">
+                                        <Button
+                                            type="submit"
+                                            className="w-full h-[52px]"
+                                            color="#c02033"
+                                        >
                                             {t("Submit Request", "إرسال الطلب")}
                                         </Button>
                                     </div>

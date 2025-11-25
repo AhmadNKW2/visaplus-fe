@@ -25,6 +25,9 @@ const almarai = Almarai({
 export const metadata: Metadata = {
   title: "Visaplus Admin Dashboard",
   description: "Admin dashboard for Visaplus management system",
+  icons: {
+    icon: "/Logo-Icon.svg",
+  },
 };
 
 export default function RootLayout({

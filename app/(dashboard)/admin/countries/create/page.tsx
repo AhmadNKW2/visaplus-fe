@@ -16,6 +16,7 @@ import React from "react";
 
 export default function CreateCountryPage() {
     const router = useRouter();
+
     const { data: countriesWorld, isLoading: isLoadingCountries } = useCountriesWorld();
     const { data: attributesData, isLoading: isLoadingAttributes } = useAttributes({ limit: 1000 });
     const createMutation = useCreateCountry();
@@ -40,7 +41,7 @@ export default function CreateCountryPage() {
         router.push("/admin/countries");
     };
 
-    if (isLoadingCountries || isLoadingAttributes) {
+    if (isLoadingAttributes) {
         return (
             <div className="p-8">
                 <div className="flex items-center justify-center h-64">
