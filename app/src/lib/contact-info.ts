@@ -1,7 +1,8 @@
 export const CONTACT_INFO = {
   phone: "+962 797675310",
   phone2: "+962 796002528",
-  whatsappPhone: "00962797675310",
+  whatsappNumber: "962797675310",
+  phoneNumber: "962797675310",
   email: "support@visaplusjo.com",
   location: {
     en: "Wasfi Al-Tal Street (Al-Gardens), Al-Mahaniyeh Towers Complex, Building 176, Amman, Jordan",
