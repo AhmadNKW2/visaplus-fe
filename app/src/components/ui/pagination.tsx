@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { Select, SelectOption } from './select';
+import { Select } from './select'; // Ensure this imports your FIXED Select component
 import { Button } from './button';
 import { Input } from './input';
 import { Card } from './card';
@@ -34,7 +34,7 @@ const PaginationButton: React.FC<PaginationButtonProps> = ({ onClick, disabled, 
   <button
     onClick={onClick}
     disabled={disabled}
-    className="w-8 h-8 p-1 flex justify-center items-center rounded-rounded1 border border-fourth text-fourth hover:bg-fourth disabled:opacity-25 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-all duration-200"
+    className="w-8 h-8 p-1 flex justify-center items-center rounded-rounded1 border border-sixth text-sixth hover:bg-sixth hover:text-white disabled:opacity-25 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-all duration-200"
     title={title}
   >
     {icon}
@@ -49,7 +49,7 @@ interface PageNumberProps {
   index: number;
 }
 
-const PageNumber: React.FC<PageNumberProps> = ({ page, isActive, currentPage, onPageChange, index }) => {
+const PageNumber: React.FC<PageNumberProps> = ({ page, isActive, currentPage, onPageChange }) => {
   const pageNumber = page as number;
 
   return (
@@ -58,7 +58,7 @@ const PageNumber: React.FC<PageNumberProps> = ({ page, isActive, currentPage, on
       onClick={() => onPageChange(pageNumber)}
       variant={isActive ? "solid" : "outline"}
       isSquare
-      color={isActive ? 'var(--color-fifth)' : 'var(--color-fourth)'}
+      color={isActive ? 'var(--color-fifth)' : 'var(--color-sixth)'}
     >
       {pageNumber}
     </Button>
@@ -79,19 +79,13 @@ export const Pagination: React.FC<PaginationProps> = ({
   // Generate page numbers to display
   const getPageNumbers = () => {
     const pages: number[] = [];
-
-    // Show all pages without ellipsis
     for (let i = 1; i <= totalPages; i++) {
       pages.push(i);
     }
-
     return pages;
   };
 
   const pages = getPageNumbers();
-
-  const startItem = (currentPage - 1) * pageSize + 1;
-  const endItem = Math.min(currentPage * pageSize, totalItems);
 
   const handleGoToPage = () => {
     const pageNum = parseInt(goToPage, 10);
@@ -116,14 +110,18 @@ export const Pagination: React.FC<PaginationProps> = ({
             <span className="text-sm text-gray-500 whitespace-nowrap">
               Rows per page:
             </span>
-            <div className="w-15">
+            <div className="w-18"> {/* Slightly wider to fit "100" cleanly */}
               <Select
                 value={String(pageSize)}
                 onChange={(value) => onPageSizeChange(Number(value))}
                 options={pageSizeOptions.map(option => ({
                   value: String(option),
                   label: String(option),
-                  disabled: totalItems < 10 ? true : (totalItems < 50 && option >= 50) || (totalItems >= 10 && totalItems < 50 && option === 10)
+                  disabled: 
+                    (option === 10 && totalItems < 10) ||
+                    (option === 20 && totalItems < 10) ||
+                    (option === 50 && totalItems <= 20) ||
+                    (option === 100 && totalItems <= 50)
                 }))}
                 search={false}
                 disabled={totalItems < 10}

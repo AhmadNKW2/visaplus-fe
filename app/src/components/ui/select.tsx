@@ -132,6 +132,10 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
         if (!isOpen) {
           setIsOpen(true);
           setIsFocused(true);
+        } else {
+          // If already open and not searching, toggle close
+          setIsOpen(false);
+          setIsFocused(false);
         }
       } else if (e.key === 'Escape' && isOpen) {
         setIsOpen(false);
@@ -197,7 +201,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       error,
       hasValue,
       false,
-      !isSm, // <--- CHANGE THIS from 'true' to '!isSm'
+      !isSm,
       className
     );
     const rightIconPosition = getRightIconPosition(size);
@@ -210,9 +214,15 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             <div
               ref={ref}
               role="combobox"
+              aria-expanded={isOpen}
+              aria-haspopup="listbox"
+              aria-controls="select-dropdown"
               aria-disabled={disabled}
-              // ... other props ...
-              // ADD 'flex items-center justify-center text-center' here:
+              // --- FIX 1: Add Event Handlers to Small Variant ---
+              onClick={handleToggle}
+              onKeyDown={handleKeyDown}
+              tabIndex={disabled ? -1 : 0}
+              // ------------------------------------------------
               className={`${selectClasses} ${disabled ? 'opacity-50' : 'cursor-pointer'} flex items-center justify-start text-center`}
               {...props}
             >
@@ -220,13 +230,12 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                 {displayValue || 'placeholder'}
               </span>
             </div>
-            {/* Icon remains here */}
+            {/* Icon */}
             <div className={`absolute ${rightIconPosition} top-1/2 -translate-y-1/2 pointer-events-none z-10`}>
               {chevronIcon}
             </div>
           </>
         ) : (
-
           <FieldWrapper
             label={label}
             error={error}
@@ -290,12 +299,17 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           id="select-dropdown"
           role="listbox"
           aria-multiselectable={multiple}
-          className={`fixed z-50 mt-1 bg-secondary border-2 border-primary overflow-hidden rounded-rounded1 shadow-lg transition-all duration-200 origin-top ${isOpen
+          // --- FIX 2: Change fixed to absolute to anchor to parent ---
+          className={`absolute z-50 mt-1 bg-secondary border-2 border-primary overflow-hidden rounded-rounded1 shadow-lg transition-all duration-200 origin-top ${isOpen
             ? 'opacity-100 scale-y-100 visible'
             : 'opacity-0 scale-y-95 invisible'
             }`}
           style={{
-            width: containerRef.current?.getBoundingClientRect().width,
+            // Ensure it has at least 100% width of parent, but can be auto for small inputs
+            minWidth: '100%',
+            width: isSm ? 'max-content' : containerRef.current?.getBoundingClientRect().width,
+            // Fallback constraint
+            maxWidth: '300px'
           }}
         >
           {/* Search Input */}

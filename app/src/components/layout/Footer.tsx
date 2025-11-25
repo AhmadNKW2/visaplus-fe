@@ -22,7 +22,7 @@ export const Footer = () => {
                                 alt="VisaPlus Logo"
                             />
                         </div>
-                        <p className="text-red-200 text-sm leading-relaxed max-w-xs">
+                        <p className="text-white text-sm leading-relaxed max-w-xs">
                             {t(
                                 "Your trusted partner for visa assistance. We make your travel dreams a reality with professional and fast service.",
                                 "شريكك الموثوق للمساعدة في التأشيرة. نجعل أحلام سفرك حقيقة بخدمة احترافية وسريعة."

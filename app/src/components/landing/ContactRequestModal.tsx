@@ -10,6 +10,7 @@ import { Phone, Mail, MapPin, CheckCircle2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Country } from "../../services/countries/types/country.types";
 import { CONTACT_INFO } from "../../lib/contact-info";
+import { useValidation } from "../../hooks/use-validation";
 
 interface ContactRequestModalProps {
     isOpen: boolean;
@@ -33,27 +34,50 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
         destination: "",
     });
 
+    const { errors, validateField, validateForm } = useValidation();
+
     useEffect(() => {
         if (isOpen) {
             setSubmitted(false); // Reset state on open
-            setFormData({
-                firstName: "",
-                lastName: "",
-                nationality: "",
-                phoneNumber: "",
-                destination: "",
+        } else {
+            // Reset validation errors when modal closes, but keep form data
+            Object.keys(errors).forEach(key => {
+                validateField(key, formData[key as keyof typeof formData] || '', []);
             });
         }
-        if (selectedCountry) {
+        if (selectedCountry && isOpen) {
             setFormData(prev => ({
                 ...prev,
                 destination: language === 'ar' ? selectedCountry.countryWorld?.name_ar || '' : selectedCountry.countryWorld?.name_en || ''
             }));
         }
-    }, [selectedCountry, language, isOpen]);
+    }, [isOpen]);
+
+    const handleChange = (field: string, value: string) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+        
+        // Validate on change
+        if (field === 'firstName' || field === 'lastName') {
+        } else if (field === 'phoneNumber') {
+             validateField(field, value, ['required', 'isNum']);
+        } else {
+             validateField(field, value, ['required']);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const isValid = validateForm(formData, {
+            firstName: ['required'],
+            lastName: ['required'],
+            nationality: ['required'],
+            phoneNumber: ['required'],
+            destination: ['required'],
+        });
+
+        if (!isValid) return;
+
         try {
             await contactRequestService.createContactRequest({
                 name: `${formData.firstName} ${formData.lastName}`.trim(),
@@ -164,26 +188,26 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
                                     {t("Fill in the details below and our experts will reach out.", "املأ التفاصيل أدناه وسيتواصل معك خبراؤنا.")}
                                 </p>
 
-                                <form onSubmit={handleSubmit} className="space-y-5">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <form onSubmit={handleSubmit} className="space-y-5 flex flex-col">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
                                         <div className="space-y-1">
                                             <label className="text-xs font-semibold text-gray-500 uppercase">{t("First Name", "الاسم الأول")}</label>
                                             <Input
                                                 value={formData.firstName}
-                                                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                                                onChange={(e) => handleChange('firstName', e.target.value)}
                                                 className="bg-white"
-                                                required
                                                 isRtl={isRtl ? true : false}
+                                                error={errors.firstName}
                                             />
                                         </div>
                                         <div className="space-y-1">
                                             <label className="text-xs font-semibold text-gray-500 uppercase">{t("Last Name", "اسم العائلة")}</label>
                                             <Input
                                                 value={formData.lastName}
-                                                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                                                onChange={(e) => handleChange('lastName', e.target.value)}
                                                 className="bg-white"
                                                 isRtl={isRtl ? true : false}
-                                                required
+                                                error={errors.lastName}
                                             />
                                         </div>
                                     </div>
@@ -191,22 +215,23 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
                                         <label className="text-xs font-semibold text-gray-500 uppercase">{t("Nationality", "الجنسية")}</label>
                                         <Input
                                             value={formData.nationality}
-                                            onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
+                                            onChange={(e) => handleChange('nationality', e.target.value)}
                                             className="bg-white"
                                             isRtl={isRtl ? true : false}
-                                            required
+                                            error={errors.nationality}
                                         />
                                     </div>
 
                                     <div className="space-y-1">
                                         <label className="text-xs font-semibold text-gray-500 uppercase">{t("Phone Number", "رقم الهاتف")}</label>
                                         <Input
-                                            type="tel"
+                                            type="text"
                                             value={formData.phoneNumber}
-                                            onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                                            onChange={(e) => handleChange('phoneNumber', e.target.value)}
                                             className="bg-white"
                                             isRtl={isRtl ? true : false}
-                                            required
+                                            isNum={true}
+                                            error={errors.phoneNumber}
                                         />
                                     </div>
 
@@ -214,14 +239,14 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
                                         <label className="text-xs font-semibold text-gray-500 uppercase">{t("Destination", "الوجهة")}</label>
                                         <Input
                                             value={formData.destination}
-                                            onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
+                                            onChange={(e) => handleChange('destination', e.target.value)}
                                             className="bg-white"
                                             isRtl={isRtl ? true : false}
-                                            required
+                                            error={errors.destination}
                                         />
                                     </div>
 
-                                    <div className="pt-4">
+                                    <div className="pt-4 mt-auto">
                                         <Button
                                             type="submit"
                                             className="w-full h-[52px]"

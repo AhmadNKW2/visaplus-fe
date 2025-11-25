@@ -12,7 +12,7 @@ interface LanguageContextType {
   dir: "ltr" | "rtl";
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children, initialLang = "en" }: { children: ReactNode; initialLang?: Language }) {
   const [language, setLanguage] = useState<Language>(initialLang);

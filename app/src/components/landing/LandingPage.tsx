@@ -117,7 +117,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-4 shrink-0 order-1 sm:order-none sm:ml-0">
             <button
               onClick={() => setLanguage(language === "en" ? "ar" : "en")}
-              className="text-sm font-medium text-gray-600 hover:text-black active:text-black transition-colors duration-300"
+              className="text-sm font-bold text-[#00205b] hover:text-blue-600 active:text-black transition-colors duration-300"
             >
               {language === "en" ? "العربية" : "English"}
             </button>
@@ -187,9 +187,26 @@ export default function LandingPage() {
             <h3 className="text-xl font-medium text-gray-900">
               {t("No countries found", "لم يتم العثور على دول")}
             </h3>
-            <p className="text-gray-500">
+            <p className="text-gray-500 mb-6">
               {t("Try adjusting your search terms.", "حاول تعديل مصطلحات البحث.")}
             </p>
+            <button
+              onClick={() => setSearch("")}
+              className="min-w-[150px] px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200 font-medium text-sm"
+            >
+              {t("Show All Countries", "عرض جميع الدول")}
+            </button>
+          </div>
+        )}
+
+        {!loading && filteredCountries.length > 0 && search && (
+          <div className="flex justify-center mt-12">
+            <button
+              onClick={() => setSearch("")}
+              className="min-w-[150px] px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200 font-medium text-sm"
+            >
+              {t("Show All Countries", "عرض جميع الدول")}
+            </button>
           </div>
         )}
       </main>

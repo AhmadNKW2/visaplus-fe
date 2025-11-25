@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-export type ValidationRule = 'required' | 'isAr' | 'isEn';
+export type ValidationRule = 'required' | 'isAr' | 'isEn' | 'isNum';
 
 export interface ValidationConfig {
     [key: string]: ValidationRule[];
@@ -37,6 +37,12 @@ export const useValidation = (): UseValidationReturn => {
             const enRegex = /^[a-zA-Z0-9\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/;
             if (value && typeof value === 'string' && !enRegex.test(value)) {
                 return 'Only English characters are allowed';
+            }
+        }
+        if (rule === 'isNum') {
+            // Only numbers allowed
+            if (value && typeof value === 'string' && !/^\d+$/.test(value)) {
+                return 'Only numbers are allowed';
             }
         }
         return null;

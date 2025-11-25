@@ -1,10 +1,6 @@
-/**
- * React Query hooks for contact requests
- */
-
 import { useQuery } from "@tanstack/react-query";
-import { contactRequestService } from "../api/contact-request.service";
-import { queryKeys } from "../../../lib/query-keys";
+import { contactRequestService } from "../api/contact-request.service"; // Adjust path as needed based on your folder structure
+import { queryKeys } from "../../../lib/query-keys"; // Adjust path as needed
 
 /**
  * Convert snake_case to camelCase
@@ -49,33 +45,38 @@ export const useContactRequests = (params?: {
   return useQuery({
     queryKey: [...queryKeys.contactRequests.all, params],
     queryFn: () => contactRequestService.getContactRequests(params),
-    placeholderData: (previousData) => previousData, // Keep previous data while loading
-    select: (response) => {
-      console.log('API Response:', response); // Debug log
-      
-      // API returns nested structure: response.data.data or response.data
-      const data = response.data as any;
-      
-      // Handle various response structures
+    placeholderData: (previousData) => previousData,
+    select: (response: any) => {
+      // --- FIX START ---
+
       let items: any[] = [];
       let meta: any = {};
-      
-      if (data && typeof data === 'object') {
-        // Check for nested data property (data.data)
-        if ('data' in data && Array.isArray(data.data)) {
-          items = data.data;
-          meta = data.meta || {};
-        }
-        // Check if data itself is an array
-        else if (Array.isArray(data)) {
-          items = data;
-        }
+
+      // Analyze response structure to find data and meta
+
+      // Case 1: Response is { data: [...], meta: {...} } (Your current structure)
+      if (response && 'data' in response && Array.isArray(response.data) && 'meta' in response) {
+        items = response.data;
+        meta = response.meta;
       }
-      
-      console.log('Extracted items:', items); // Debug log
-      console.log('Extracted meta:', meta); // Debug log
-      
-      // Transform snake_case keys to camelCase
+      // Case 2: Response is { data: { data: [...], meta: {...} } } (Nested axios wrapper)
+      else if (response?.data && typeof response.data === 'object' && 'data' in response.data) {
+        items = response.data.data;
+        meta = response.data.meta || {};
+      }
+      // Case 3: Response.data is just the array (No meta available or flat structure)
+      else if (response?.data && Array.isArray(response.data)) {
+        items = response.data;
+        // Try to find meta on the parent if possible, otherwise empty
+        meta = response.meta || {};
+      }
+      // Case 4: Response itself is the array
+      else if (Array.isArray(response)) {
+        items = response;
+      }
+
+      // --- FIX END ---
+
       return {
         items: items.map(transformKeys),
         meta: transformKeys(meta),
@@ -92,13 +93,10 @@ export const useContactRequest = (id: number) => {
     queryKey: queryKeys.contactRequests.detail(id),
     queryFn: () => contactRequestService.getContactRequestById(id),
     select: (response) => {
-      // API returns nested structure: response.data.data
       const data = response.data as any;
-      // Check if data has nested data property (data.data)
       if (data && typeof data === 'object' && 'data' in data) {
         return transformKeys(data.data);
       }
-      // Fallback: return data itself
       return transformKeys(data);
     },
     enabled: !!id,

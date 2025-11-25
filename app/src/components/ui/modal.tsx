@@ -5,9 +5,9 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { IconButton } from "./icon-button";
-import { useLanguage } from "../../contexts/language.context";
+import { LanguageContext } from "../../contexts/language.context";
 
 interface ModalProps {
   isOpen: boolean;
@@ -27,8 +27,8 @@ export const Modal: React.FC<ModalProps> = ({
   className = "",
   variant = 'default',
 }) => {
-  const { language } = useLanguage();
-  const isRtl = language === 'ar';
+  const context = useContext(LanguageContext);
+  const isRtl = context?.language === 'ar';
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 

@@ -66,10 +66,22 @@ export default function ContactRequestsPage() {
     const { data, isLoading, error } = useContactRequests({
         page: currentPage,
         limit: pageSize,
+        sort: sortConfig ? `${sortConfig.key}:${sortConfig.order}` : undefined,
+        search: filterValues.search,
+        startDate: filterValues.dateStart,
+        endDate: filterValues.dateEnd,
     });
 
     const contactRequests = data?.items || [];
-    const meta = data?.meta || {};
+    // Ensure meta has default values if missing
+    const meta = {
+        total: data?.meta?.total || 0,
+        page: data?.meta?.page || 1,
+        limit: data?.meta?.limit || 10,
+        totalPages: data?.meta?.totalPages || Math.ceil((data?.meta?.total || 0) / (data?.meta?.limit || 10)),
+        hasNextPage: data?.meta?.hasNextPage ?? false,
+        hasPreviousPage: data?.meta?.hasPreviousPage ?? false
+    };
 
     const handleSort = (key: string) => {
         setSortConfig((current) => {
@@ -190,7 +202,7 @@ export default function ContactRequestsPage() {
                                             {request.createdAt ? (() => {
                                                 const date = new Date(request.createdAt);
                                                 const time = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-                                                const dateStr = date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+                                                const dateStr = date.toLocaleDateString('en-GB', { month: '2-digit', day: '2-digit', year: 'numeric' });
                                                 return `${time}, ${dateStr}`;
                                             })() : '-'}
                                         </TableCell>

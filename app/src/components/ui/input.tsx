@@ -40,18 +40,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const isSm = size === 'sm';
 
     const handleNumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (isNum) {
-        const value = e.target.value;
-        if (value === '' || /^\d+$/.test(value)) {
-          onChange?.(e);
-        }
-      } else {
-        onChange?.(e);
-      }
+      // Always pass through the value - validation is handled separately
+      onChange?.(e);
     };
 
     const inputClasses = getFieldClassesBySize(size, error, hasValue, isSearchVariant, isNum, className, isRtl);
     const rightIconPosition = getRightIconPosition(size);
+    // For RTL, position the # icon on the left side
+    const numIconPosition = isRtl ? 'left-4' : rightIconPosition;
 
     // For sm size without label/error, render simplified version
     if (isSm && !label && !error) {
@@ -74,7 +70,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {isNum && (
-            <span className={`absolute ${rightIconPosition} top-1/2 -translate-y-1/2 ${FIELD_RIGHT_ICON_COLOR} text-base pointer-events-none z-10`}>
+            <span className={`absolute ${numIconPosition} top-1/2 -translate-y-1/2 ${FIELD_RIGHT_ICON_COLOR} text-base pointer-events-none z-10`}>
               #
             </span>
           )}
