@@ -21,34 +21,46 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   disabled = false,
   className = "",
 }) => {
-  const checkboxId = `checkbox-${Math.random().toString(36).substr(2, 9)}`;
+  const uniqueId = React.useId();
+  const checkboxId = `checkbox-${uniqueId}`;
 
-  // If no label, just render the input directly
-  if (!label) {
-    return (
-      <div className={`checkbox-wrapper-13 ${className}`}>
-        <input
-          id={checkboxId}
-          type="checkbox"
-          checked={checked}
-          onChange={(e) => !disabled && onChange(e.target.checked)}
-          disabled={disabled}
-        />
-      </div>
-    );
-  }
+  const inputClasses = `
+    peer appearance-none h-[21px] w-[21px] outline-none inline-block align-top relative m-0 cursor-pointer
+    border border-[#BBC1E1] bg-white rounded-[7px] transition-all duration-300
+    checked:bg-fifth checked:border-fifth
+    hover:enabled:border-fifth
+    focus:ring-2 focus:ring-fifth/30
+    disabled:bg-[#F6F8FF] disabled:cursor-not-allowed disabled:opacity-90
+    disabled:checked:bg-[#E1E6F9] disabled:checked:border-[#BBC1E1]
+    
+    after:content-[''] after:block after:absolute after:left-[7px] after:top-[4px] 
+    after:w-[5px] after:h-[9px] after:border-2 after:border-white 
+    after:border-t-0 after:border-l-0 after:rotate-[20deg] after:opacity-0 
+    after:transition-all after:duration-300
+    
+    checked:after:opacity-100 checked:after:rotate-[43deg]
+  `.replace(/\s+/g, ' ').trim();
 
-  // If label exists, render with label wrapper
+  const labelClasses = `
+    inline-block align-middle cursor-pointer ml-2
+    peer-disabled:cursor-not-allowed
+  `.replace(/\s+/g, ' ').trim();
+
   return (
-    <div className={`checkbox-wrapper-13 ${className}`}>
+    <div className={`${className} inline-flex items-center`}>
       <input
         id={checkboxId}
         type="checkbox"
+        className={inputClasses}
         checked={checked}
         onChange={(e) => !disabled && onChange(e.target.checked)}
         disabled={disabled}
       />
-      <label htmlFor={checkboxId}>{label}</label>
+      {label && (
+        <label htmlFor={checkboxId} className={labelClasses}>
+          {label}
+        </label>
+      )}
     </div>
   );
 };

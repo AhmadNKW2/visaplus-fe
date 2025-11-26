@@ -7,7 +7,6 @@
 
 import React, { useEffect, useState, useContext } from "react";
 import { IconButton } from "./icon-button";
-import { LanguageContext } from "../../contexts/language.context";
 
 interface ModalProps {
   isOpen: boolean;
@@ -27,27 +26,32 @@ export const Modal: React.FC<ModalProps> = ({
   className = "",
   variant = 'default',
 }) => {
-  const context = useContext(LanguageContext);
-  const isRtl = context?.language === 'ar';
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
   // Handle modal visibility with animation
   useEffect(() => {
     if (isOpen) {
-      setIsVisible(true);
-      // Trigger animation after render with small delay
-      const timer = setTimeout(() => {
-        setIsAnimating(true);
-      }, 10);
-      return () => clearTimeout(timer);
+      // Use setTimeout to avoid synchronous state update during render phase
+      const showTimer = setTimeout(() => {
+        setIsVisible(true);
+        // Trigger animation after render with small delay
+        const animTimer = setTimeout(() => {
+          setIsAnimating(true);
+        }, 10);
+        return () => clearTimeout(animTimer);
+      }, 0);
+      return () => clearTimeout(showTimer);
     } else {
-      setIsAnimating(false);
+      const animTimer = setTimeout(() => setIsAnimating(false), 0);
       // Wait for animation to complete before hiding
       const timer = setTimeout(() => {
         setIsVisible(false);
       }, 200); // Match animation duration
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(animTimer);
+        clearTimeout(timer);
+      };
     }
   }, [isOpen]);
 
@@ -96,22 +100,22 @@ export const Modal: React.FC<ModalProps> = ({
     >
       <div
         className={`
-          relative w-full max-w-xl max-md:max-h-[90vh] md:overflow-y-auto
-          ${variant === 'default' ? 'bg-white p-5' : ''}
+          relative w-full max-w-2xl max-md:max-h-[90vh] md:overflow-y-auto
+          ${variant === 'default' ? 'p-5' : ''}
           rounded-rounded1 shadow-2xl
           flex flex-col justify-center items-center gap-5
           transition-all duration-200 ease-out
-          ${isAnimating 
-            ? 'opacity-100 scale-100 translate-y-0' 
+          ${isAnimating
+            ? 'opacity-100 scale-100 translate-y-0'
             : 'opacity-0 scale-95 -translate-y-4'
-        } ${className}`}
+          } ${className}`}
         onClick={(e) => e.stopPropagation()}
-        >
+      >
         {/* Content */}
         <IconButton
           onClick={onClose}
           variant="cancel"
-          className={`absolute top-3 ${isRtl ? 'left-3' : 'right-3'}`}
+          className="absolute top-3 right-3 z-1000"
         />
 
         {/* Content */}
