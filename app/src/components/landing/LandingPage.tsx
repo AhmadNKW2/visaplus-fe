@@ -111,7 +111,7 @@ export default function LandingPage() {
       {/* Navigation Bar (Glassmorphic) */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-sm border-b border-gray-200/50 transition-all duration-300 h-auto min-h-[80px]">
         <div className={`max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between ${showStickySearch ? 'gap-4' : ''}`}>
-          <div className="relative w-37 h-10 max-[400]:w-30">
+          <div className="relative w-45 h-15 max-[400]:w-30">
             <Image
               fill
               src="/Logo.svg"

@@ -15,7 +15,7 @@ export const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                     {/* Brand */}
                     <div className="space-y-4">
-                        <div className="relative w-37 h-10">
+                        <div className="relative w-45 h-15">
                             <Image
                                 fill
                                 src="/Logo2.svg"
