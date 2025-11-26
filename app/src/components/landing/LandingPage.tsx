@@ -27,6 +27,27 @@ export default function LandingPage() {
   // Create a ref specific to the search input container
   const searchRef = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const countryGridRef = useRef<HTMLDivElement>(null);
+
+  // Handle click outside to close expanded country card
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (openCountryId === null) return;
+      
+      const target = e.target as HTMLElement;
+      
+      // Find the currently open card element
+      const openCard = document.querySelector(`[data-country-id="${openCountryId}"]`);
+      
+      // If click is outside the open card, close it
+      if (openCard && !openCard.contains(target)) {
+        setOpenCountryId(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [openCountryId]);
 
   const handleSearchSubmit = () => {
     if (resultsRef.current) {
@@ -164,6 +185,7 @@ export default function LandingPage() {
           </div>
         ) : (
           <motion.div
+            ref={countryGridRef}
             layout
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
           >

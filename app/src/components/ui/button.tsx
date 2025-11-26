@@ -35,7 +35,7 @@ export const Button: React.FC<ButtonProps> = ({ children, onClick, variant = 'so
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`text-nowrap ${sizeClasses} rounded-rounded1 font-[500] text-[16px] transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${variantClasses[variant]} ${className}`}
+      className={`text-nowrap ${sizeClasses} rounded-rounded1 font-medium text-[16px] transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${variantClasses[variant]} ${className}`}
       style={buttonStyle}
     >
       {children}

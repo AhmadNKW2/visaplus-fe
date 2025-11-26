@@ -34,7 +34,12 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
         destination: "",
     });
 
-    const { errors, validateField, validateForm } = useValidation();
+    const { errors, validateField, validateForm, setLanguage: setValidationLanguage } = useValidation(language);
+
+    // Sync validation language with site language
+    useEffect(() => {
+        setValidationLanguage(language);
+    }, [language, setValidationLanguage]);
 
     useEffect(() => {
         if (isOpen) {
@@ -58,6 +63,7 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
         
         // Validate on change
         if (field === 'firstName' || field === 'lastName') {
+            validateField(field, value, ['required']);
         } else if (field === 'phoneNumber') {
              validateField(field, value, ['required', 'isNum']);
         } else {
@@ -68,11 +74,15 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Check if there are any existing validation errors (like isNum on phoneNumber)
+        const hasExistingErrors = Object.keys(errors).length > 0;
+        if (hasExistingErrors) return;
+
         const isValid = validateForm(formData, {
             firstName: ['required'],
             lastName: ['required'],
             nationality: ['required'],
-            phoneNumber: ['required'],
+            phoneNumber: ['required', 'isNum'],
             destination: ['required'],
         });
 

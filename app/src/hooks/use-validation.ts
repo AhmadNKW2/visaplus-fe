@@ -12,15 +12,43 @@ export interface UseValidationReturn {
     validateForm: (values: Record<string, any>, config: ValidationConfig) => boolean;
     clearError: (name: string) => void;
     setError: (name: string, error: string) => void;
+    setLanguage: (lang: string) => void;
 }
 
-export const useValidation = (): UseValidationReturn => {
+export const useValidation = (initialLanguage: string = 'en'): UseValidationReturn => {
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [language, setLanguageState] = useState<string>(initialLanguage);
 
-    const validateValue = (value: any, rule: ValidationRule): string | null => {
+    const setLanguage = useCallback((lang: string) => {
+        setLanguageState(lang);
+    }, []);
+
+    const getErrorMessage = (rule: ValidationRule, lang: string): string => {
+        const messages: Record<ValidationRule, { en: string; ar: string }> = {
+            required: {
+                en: 'This field is required',
+                ar: 'هذا الحقل مطلوب'
+            },
+            isAr: {
+                en: 'Only Arabic characters are allowed',
+                ar: 'يُسمح فقط بالأحرف العربية'
+            },
+            isEn: {
+                en: 'Only English characters are allowed',
+                ar: 'يُسمح فقط بالأحرف الإنجليزية'
+            },
+            isNum: {
+                en: 'Only numbers are allowed',
+                ar: 'يُسمح فقط بالأرقام'
+            }
+        };
+        return lang === 'ar' ? messages[rule].ar : messages[rule].en;
+    };
+
+    const validateValue = useCallback((value: any, rule: ValidationRule, lang: string): string | null => {
         if (rule === 'required') {
             if (value === null || value === undefined || (typeof value === 'string' && !value.trim())) {
-                return 'This field is required';
+                return getErrorMessage('required', lang);
             }
         }
         if (rule === 'isAr') {
@@ -28,7 +56,7 @@ export const useValidation = (): UseValidationReturn => {
              // Allow spaces, numbers, common symbols
              const arRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/;
              if (value && typeof value === 'string' && !arRegex.test(value)) {
-                 return 'Only Arabic characters are allowed';
+                 return getErrorMessage('isAr', lang);
              }
         }
         if (rule === 'isEn') {
@@ -36,17 +64,17 @@ export const useValidation = (): UseValidationReturn => {
             // Allow spaces, numbers, common symbols
             const enRegex = /^[a-zA-Z0-9\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/;
             if (value && typeof value === 'string' && !enRegex.test(value)) {
-                return 'Only English characters are allowed';
+                return getErrorMessage('isEn', lang);
             }
         }
         if (rule === 'isNum') {
             // Only numbers allowed
             if (value && typeof value === 'string' && !/^\d+$/.test(value)) {
-                return 'Only numbers are allowed';
+                return getErrorMessage('isNum', lang);
             }
         }
         return null;
-    };
+    }, []);
 
     const validateField = useCallback((name: string, value: any, rules: ValidationRule[]) => {
         let error: string | null = null;
@@ -54,7 +82,7 @@ export const useValidation = (): UseValidationReturn => {
         // Check immediate rules (isAr, isEn)
         for (const rule of rules) {
             if (rule === 'required') continue; 
-            const ruleError = validateValue(value, rule);
+            const ruleError = validateValue(value, rule, language);
             if (ruleError) {
                 error = ruleError;
                 break;
@@ -74,7 +102,7 @@ export const useValidation = (): UseValidationReturn => {
         });
 
         return !error;
-    }, []);
+    }, [language, validateValue]);
 
     const validateForm = useCallback((values: Record<string, any>, config: ValidationConfig) => {
         const newErrors: Record<string, string> = {};
@@ -83,7 +111,7 @@ export const useValidation = (): UseValidationReturn => {
         for (const [key, rules] of Object.entries(config)) {
             const value = values[key];
             for (const rule of rules) {
-                const error = validateValue(value, rule);
+                const error = validateValue(value, rule, language);
                 if (error) {
                     if (!newErrors[key]) {
                         newErrors[key] = error;
@@ -109,7 +137,7 @@ export const useValidation = (): UseValidationReturn => {
         }
 
         return true;
-    }, []);
+    }, [language, validateValue]);
 
     const clearError = useCallback((name: string) => {
         setErrors(prev => {
@@ -123,5 +151,5 @@ export const useValidation = (): UseValidationReturn => {
         setErrors(prev => ({ ...prev, [name]: error }));
     }, []);
 
-    return { errors, validateField, validateForm, clearError, setError };
+    return { errors, validateField, validateForm, clearError, setError, setLanguage };
 };
