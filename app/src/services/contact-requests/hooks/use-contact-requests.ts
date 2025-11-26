@@ -113,7 +113,6 @@ export const useDeleteContactRequest = () => {
   return useMutation({
     mutationFn: (id: number) => contactRequestService.deleteContactRequest(id),
     onSuccess: () => {
-      toast.success("Contact request deleted successfully");
       queryClient.invalidateQueries({ queryKey: queryKeys.contactRequests.all });
     },
     onError: (error: any) => {

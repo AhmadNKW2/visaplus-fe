@@ -270,7 +270,7 @@ export default function ContactRequestsPage() {
                     onConfirm={handleConfirmDelete}
                     title="Delete Contact Request"
                     message="Are you sure you want to delete this contact request? This action cannot be undone."
-                    isDeleting={deleteMutation.isPending}
+                    isLoading={deleteMutation.isPending}
                 />
             </div>
         );

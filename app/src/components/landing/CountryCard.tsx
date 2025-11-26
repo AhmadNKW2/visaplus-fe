@@ -47,7 +47,7 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
       className={`
         relative w-full transition-all duration-300 ease-in-out
         h-auto sm:h-[150px]
-        ${isOpen ? 'z-50' : 'z-0 delay-300'} 
+        ${isOpen ? 'z-10' : 'z-0 delay-300'} 
       `}
     >
       <div

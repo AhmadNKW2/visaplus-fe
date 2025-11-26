@@ -65,11 +65,4 @@ export abstract class BaseService<T> {
   ): Promise<ApiResponse<T>> {
     return httpClient.patch<ApiResponse<T>>(`${this.endpoint}/${id}`, data);
   }
-
-  /**
-   * Delete an item
-   */
-  protected async delete(id: string | number): Promise<ApiResponse<void>> {
-    return httpClient.delete<ApiResponse<void>>(`${this.endpoint}/${id}`);
-  }
 }
