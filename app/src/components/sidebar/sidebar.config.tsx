@@ -5,12 +5,14 @@ export const sidebarConfig = {
     title: 'Admin Panel',
     subtitle: '',
     logo: (
-      <Image
-        width={150}
-        height={40}
-        src="/Logo.svg"
-        alt="VisaPlus Logo"
-      />
+      <a href="https://www.visaplusjo.com" target="https://www.visaplusjo.com" className="block hover:opacity-90 transition-opacity">
+        <Image
+          width={150}
+          height={40}
+          src="/Logo.svg"
+          alt="VisaPlus Logo"
+        />
+      </a>
     ),
   },
   footer: {

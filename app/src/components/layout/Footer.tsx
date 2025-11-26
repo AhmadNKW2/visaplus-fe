@@ -15,13 +15,13 @@ export const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                     {/* Brand */}
                     <div className="space-y-4">
-                        <div className="relative w-45 h-15">
+                        <a href="https://www.visaplusjo.com" className="block relative w-45 h-15 hover:opacity-90 transition-opacity">
                             <Image
                                 fill
                                 src="/Logo2.svg"
                                 alt="VisaPlus Logo"
                             />
-                        </div>
+                        </a>
                         <p className="text-white text-sm leading-relaxed max-w-xs">
                             {t(
                                 "Your trusted partner for visa assistance. We make your travel dreams a reality with professional and fast service.",

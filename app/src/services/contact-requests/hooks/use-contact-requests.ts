@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { contactRequestService } from "../api/contact-request.service"; // Adjust path as needed based on your folder structure
 import { queryKeys } from "../../../lib/query-keys"; // Adjust path as needed
+import { toast } from "react-toastify";
 
 /**
  * Convert snake_case to camelCase
@@ -100,5 +101,23 @@ export const useContactRequest = (id: number) => {
       return transformKeys(data);
     },
     enabled: !!id,
+  });
+};
+
+/**
+ * Delete contact request
+ */
+export const useDeleteContactRequest = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => contactRequestService.deleteContactRequest(id),
+    onSuccess: () => {
+      toast.success("Contact request deleted successfully");
+      queryClient.invalidateQueries({ queryKey: queryKeys.contactRequests.all });
+    },
+    onError: (error: any) => {
+      toast.error(error?.message || "Failed to delete contact request");
+    },
   });
 };

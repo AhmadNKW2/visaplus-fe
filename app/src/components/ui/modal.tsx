@@ -96,10 +96,10 @@ export const Modal: React.FC<ModalProps> = ({
     >
       <div
         className={`
-          relative w-full max-w-4xl max-md:max-h-[90vh] md:overflow-y-auto
+          relative w-full max-w-xl max-md:max-h-[90vh] md:overflow-y-auto
           ${variant === 'default' ? 'bg-white p-5' : ''}
           rounded-rounded1 shadow-2xl
-          flex flex-col justify-start
+          flex flex-col justify-center items-center gap-5
           transition-all duration-200 ease-out
           ${isAnimating 
             ? 'opacity-100 scale-100 translate-y-0' 

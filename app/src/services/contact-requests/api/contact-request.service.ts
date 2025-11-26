@@ -50,6 +50,13 @@ class ContactRequestService extends BaseService<ContactRequest> {
   async createContactRequest(data: Partial<ContactRequest>): Promise<ApiResponse<ContactRequest>> {
     return this.create(data, { skipToast: true });
   }
+
+  /**
+   * Delete a contact request
+   */
+  async deleteContactRequest(id: number): Promise<ApiResponse<void>> {
+    return this.delete(id);
+  }
 }
 
 export const contactRequestService = new ContactRequestService();

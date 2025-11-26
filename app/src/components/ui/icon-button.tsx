@@ -32,7 +32,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className={`z-100 p-2 rounded-full inline-flex items-center justify-center transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${styles} ${className}`}
+      className={`z-10 p-2 rounded-full inline-flex items-center justify-center transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${styles} ${className}`}
     >
       <Icon className="w-4 h-4 " />
     </button>

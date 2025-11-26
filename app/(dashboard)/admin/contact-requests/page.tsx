@@ -17,8 +17,10 @@ import {
 } from "../../../src/components/ui/table";
 import { Pagination } from "../../../src/components/ui/pagination";
 import { Filter, FilterRow, FilterValues } from "../../../src/components/common/Filter";
-import { useContactRequests } from "../../../src/services/contact-requests/hooks/use-contact-requests";
+import { useContactRequests, useDeleteContactRequest } from "../../../src/services/contact-requests/hooks/use-contact-requests";
 import { ContactRequest } from "../../../src/services/contact-requests/types/contact-request.types";
+import { IconButton } from "../../../src/components/ui/icon-button";
+import { DeleteConfirmationModal } from "../../../src/components/common/DeleteConfirmationModal";
 
 export default function ContactRequestsPage() {
     const [currentPage, setCurrentPage] = useState(1);
@@ -32,6 +34,11 @@ export default function ContactRequestsPage() {
         dateStart: "",
         dateEnd: "",
     });
+
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState<number | null>(null);
+
+    const deleteMutation = useDeleteContactRequest();
 
     // Define filter rows for contact requests
     const filterRows: FilterRow[] = [
@@ -104,6 +111,19 @@ export default function ContactRequestsPage() {
     const handlePageSizeChange = (size: number) => {
         setPageSize(size);
         setCurrentPage(1); // Reset to first page when changing page size
+    };
+
+    const handleDeleteClick = (id: number) => {
+        setSelectedId(id);
+        setDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (selectedId) {
+            await deleteMutation.mutateAsync(selectedId);
+            setDeleteModalOpen(false);
+            setSelectedId(null);
+        }
     };
 
     if (error) {
@@ -188,6 +208,7 @@ export default function ContactRequestsPage() {
                                     >
                                         Date
                                     </TableHead>
+                                    <TableHead width="10%">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -205,6 +226,15 @@ export default function ContactRequestsPage() {
                                                 const dateStr = date.toLocaleDateString('en-GB', { month: '2-digit', day: '2-digit', year: 'numeric' });
                                                 return `${time}, ${dateStr}`;
                                             })() : '-'}
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-2">
+                                                <IconButton
+                                                    variant="delete"
+                                                    onClick={() => handleDeleteClick(request.id)}
+                                                    title="Delete Request"
+                                                />
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -233,6 +263,15 @@ export default function ContactRequestsPage() {
                         <p className="text-gray-500 text-lg mb-4">No contact requests found</p>
                     </div>
                 )}
+
+                <DeleteConfirmationModal
+                    isOpen={deleteModalOpen}
+                    onClose={() => setDeleteModalOpen(false)}
+                    onConfirm={handleConfirmDelete}
+                    title="Delete Contact Request"
+                    message="Are you sure you want to delete this contact request? This action cannot be undone."
+                    isDeleting={deleteMutation.isPending}
+                />
             </div>
         );
     }
