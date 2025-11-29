@@ -51,13 +51,13 @@ class CountryService extends BaseService<Country> {
   }
 
   /**
-   * Update an existing country (partial update)
+   * Update an existing country (full update)
    */
   async updateCountry(
     id: number,
     data: UpdateCountryDto
   ): Promise<ApiResponse<Country>> {
-    return this.patch(id, data);
+    return this.update(id, data);
   }
 
   /**

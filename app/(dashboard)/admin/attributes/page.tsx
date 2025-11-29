@@ -275,18 +275,28 @@ export default function AttributesPage() {
 
         try {
             if (editMode.id === "new") {
-                await createMutation.mutateAsync({
+                const response = await createMutation.mutateAsync({
                     name_en: editMode.nameEn,
                     name_ar: editMode.nameAr,
                 });
+                // Update local state with response data
+                const createdAttribute = response.data;
+                setLocalAttributes([...localAttributes, createdAttribute]);
             } else {
-                await updateMutation.mutateAsync({
+                const response = await updateMutation.mutateAsync({
                     id: editMode.id,
                     data: {
                         name_en: editMode.nameEn,
                         name_ar: editMode.nameAr,
                     },
                 });
+                // Update local state with response data
+                const updatedAttribute = response.data;
+                setLocalAttributes(
+                    localAttributes.map(attr => 
+                        attr.id === editMode.id ? updatedAttribute : attr
+                    )
+                );
             }
             setEditMode(null);
         } catch (error) {

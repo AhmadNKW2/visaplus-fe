@@ -7,6 +7,7 @@
 
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { CountryForm } from "../../../../src/components/countries/CountryForm";
 import {
     useCountry,
@@ -14,11 +15,13 @@ import {
     useCountriesWorld,
 } from "../../../../src/services/countries/hooks/use-countries";
 import { useAttributes } from "../../../../src/services/attributes/hooks/use-attributes";
+import { queryKeys } from "../../../../src/lib/query-keys";
 
 export default function EditCountryPage() {
     const router = useRouter();
     const params = useParams();
     const countryId = parseInt(params.id as string);
+    const queryClient = useQueryClient();
 
     const { data: country, isLoading: isLoadingCountry } = useCountry(countryId);
     const { data: countriesWorld, isLoading: isLoadingCountries } = useCountriesWorld();
@@ -32,44 +35,25 @@ export default function EditCountryPage() {
             return;
         }
 
-        // Calculate only changed values
-        const changedData: any = {};
-        
-        // Check if countryWorldId changed
-        if (country.countryWorldId !== data.countryWorldId) {
-            changedData.countryWorldId = data.countryWorldId;
-        }
-
-        // Check if attributes changed
-        const changedAttributes = data.attributes.filter((newAttr: any) => {
-            const oldAttr = country.attributes?.find(
-                (attr: any) => attr.attributeId === newAttr.attributeId
-            );
-            
-            if (!oldAttr) return true; // New attribute
-            
-            // Check if any field changed
-            return (
-                oldAttr.value_en !== newAttr.value_en ||
-                oldAttr.value_ar !== newAttr.value_ar ||
-                oldAttr.isActive !== newAttr.isActive
-            );
-        });
-
-        if (changedAttributes.length > 0) {
-            changedData.attributes = changedAttributes;
-        }
-
-        // Only send PATCH if there are actual changes
-        if (Object.keys(changedData).length === 0) {
-            router.push("/admin/countries");
-            return;
-        }
+        // Send full country data with PUT request
+        const fullCountryData = {
+            countryWorldId: data.countryWorldId,
+            attributes: data.attributes.map((attr: any) => ({
+                attributeId: attr.attributeId,
+                value_en: attr.value_en,
+                value_ar: attr.value_ar,
+                isActive: attr.isActive,
+            })),
+        };
 
         try {
-            await updateMutation.mutateAsync({
+            const response = await updateMutation.mutateAsync({
                 id: countryId,
-                data: changedData,
+                data: fullCountryData,
+            });
+            // Update the query cache with the updated country data
+            queryClient.setQueryData(queryKeys.countries.detail(countryId), {
+                data: response.data,
             });
             router.push("/admin/countries");
         } catch (error: any) {

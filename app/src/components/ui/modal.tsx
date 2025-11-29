@@ -101,7 +101,7 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         className={`
           relative w-full max-w-2xl max-md:max-h-[90vh] md:overflow-y-auto
-          ${variant === 'default' ? 'p-5' : ''}
+          ${variant === 'default' ? 'p-5 bg-white' : ''}
           rounded-rounded1 shadow-2xl
           flex flex-col justify-center items-center gap-5
           transition-all duration-200 ease-out

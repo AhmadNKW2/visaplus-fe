@@ -30,7 +30,7 @@ export const DeleteConfirmationModal: React.FC<
   isLoading = false,
 }) => {
     return (
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} variant="default">
         <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full">
           <AlertTriangle className="w-6 h-6 text-red-600" />
         </div>
