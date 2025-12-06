@@ -125,9 +125,9 @@ export const CountryForm: React.FC<CountryFormProps> = ({
         );
 
         if (field === 'value_en') {
-            validateField(`attribute_${attributeId}_en`, value, ['required', 'isEn']);
+            validateField(`attribute_${attributeId}_en`, value, ['required']);
         } else if (field === 'value_ar') {
-            validateField(`attribute_${attributeId}_ar`, value, ['required', 'isAr']);
+            validateField(`attribute_${attributeId}_ar`, value, ['required']);
         }
     };
 
@@ -143,8 +143,8 @@ export const CountryForm: React.FC<CountryFormProps> = ({
             if (row.isActive) {
                 values[`attribute_${row.attributeId}_en`] = row.value_en;
                 values[`attribute_${row.attributeId}_ar`] = row.value_ar;
-                config[`attribute_${row.attributeId}_en`] = ['required', 'isEn'];
-                config[`attribute_${row.attributeId}_ar`] = ['required', 'isAr'];
+                config[`attribute_${row.attributeId}_en`] = ['required'];
+                config[`attribute_${row.attributeId}_ar`] = ['required'];
             }
         });
 

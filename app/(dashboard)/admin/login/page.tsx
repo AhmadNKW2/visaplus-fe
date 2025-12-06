@@ -5,17 +5,19 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useAuth } from "../../../src/contexts/auth.context";
 import { Input } from "../../../src/components/ui/input";
 import { Button } from "../../../src/components/ui/button";
 import { Card } from "../../../src/components/ui/card";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { useValidation } from "../../../src/hooks/use-validation";
 
 export default function LoginPage() {
   const { login, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -44,7 +46,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-primary px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-primary px-4">
+      <div className="flex justify-center mb-10">
+        <Image
+          src="/Logo.svg"
+          alt="Visa Plus Logo"
+          width={200}
+          height={100}
+          priority
+        />
+      </div>
+
       <Card className="w-full max-w-md p-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900">Admin Login</h1>
@@ -75,10 +87,10 @@ export default function LoginPage() {
             />
           </div>
 
-          <div>
+          <div className="relative">
             <Input
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -89,6 +101,18 @@ export default function LoginPage() {
               error={errors.password}
               name="password"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
           </div>
 
           <Button

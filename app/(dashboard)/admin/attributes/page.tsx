@@ -121,7 +121,7 @@ function SortableRow({
                         value={editMode.nameEn}
                         onChange={(e) => {
                             onEditModeChange({ ...editMode, nameEn: e.target.value });
-                            validateField('nameEn', e.target.value, ['required', 'isEn']);
+                            validateField('nameEn', e.target.value, ['required']);
                         }}
                         onKeyDown={onKeyDown}
                         placeholder="Enter English name"
@@ -141,7 +141,7 @@ function SortableRow({
                         value={editMode.nameAr}
                         onChange={(e) => {
                             onEditModeChange({ ...editMode, nameAr: e.target.value });
-                            validateField('nameAr', e.target.value, ['required', 'isAr']);
+                            validateField('nameAr', e.target.value, ['required']);
                         }}
                         onKeyDown={onKeyDown}
                         placeholder="أدخل الاسم بالعربية"
@@ -267,8 +267,8 @@ export default function AttributesPage() {
             nameEn: editMode.nameEn,
             nameAr: editMode.nameAr
         }, {
-            nameEn: ['required', 'isEn'],
-            nameAr: ['required', 'isAr']
+            nameEn: ['required'],
+            nameAr: ['required']
         })) {
             return;
         }
@@ -476,7 +476,7 @@ export default function AttributesPage() {
                                                 value={editMode.nameEn}
                                                 onChange={(e) => {
                                                     setEditMode({ ...editMode, nameEn: e.target.value });
-                                                    validateField('nameEn', e.target.value, ['required', 'isEn']);
+                                                    validateField('nameEn', e.target.value, ['required']);
                                                 }}
                                                 onKeyDown={handleKeyDown}
                                                 placeholder="Enter English name"
@@ -492,7 +492,7 @@ export default function AttributesPage() {
                                                 value={editMode.nameAr}
                                                 onChange={(e) => {
                                                     setEditMode({ ...editMode, nameAr: e.target.value });
-                                                    validateField('nameAr', e.target.value, ['required', 'isAr']);
+                                                    validateField('nameAr', e.target.value, ['required']);
                                                 }}
                                                 isRtl
                                                 onKeyDown={handleKeyDown}
