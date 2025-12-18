@@ -94,10 +94,10 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
             opacity: isOpen ? 1 : 0,
           }}
         >
-          <div ref={contentRef} className="p-6 pt-4 border-t border-gray-100">
+          <div ref={contentRef} className="p-2 py-4 border-t border-gray-100">
             <div className="flex flex-col gap-2 mb-4 overflow-y-auto">
               {sortedAttributes.length > 0 ? sortedAttributes.map((attr) => (
-                <div key={attr.id} className="flex flex-col items-start text-sm bg-gray-100 px-2 py-1 rounded-rounded1">
+                <div key={attr.id} className="flex flex-col items-start text-sm bg-gray-100 p-2 rounded-rounded1">
                   <span className="text-gray-500 ltr:mr-1 rtl:ml-1">
                     {isRtl ? attr.attribute.name_ar : attr.attribute.name_en}:
                   </span>

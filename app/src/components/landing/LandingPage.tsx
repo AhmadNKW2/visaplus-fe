@@ -155,14 +155,12 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section - Pass the searchRef here */}
-      <div className="pt-20">
         <HeroSection
           searchQuery={search}
           setSearchQuery={setSearch}
           searchRef={searchRef}
           onSearchSubmit={handleSearchSubmit}
         />
-      </div>
 
       {/* Main Content */}
       <main ref={resultsRef} className="max-w-7xl w-full mx-auto px-6 py-16 scroll-mt-24">
@@ -189,7 +187,7 @@ export default function LandingPage() {
           <motion.div
             ref={countryGridRef}
             layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-20"
           >
             <AnimatePresence>
               {filteredCountries.map((country) => (
