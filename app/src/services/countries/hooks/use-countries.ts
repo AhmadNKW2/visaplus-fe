@@ -28,6 +28,10 @@ const selectCountriesData = (response: any) => {
     // Check if data itself is an array
     else if (Array.isArray(data)) {
       items = data;
+      // If data is the array, meta is on the parent response object
+      if (response.meta) {
+        meta = response.meta;
+      }
     }
   }
   
@@ -40,17 +44,23 @@ const selectCountriesData = (response: any) => {
 /**
  * Get all countries
  */
-export const useCountries = (params?: {
-  page?: number;
-  limit?: number;
-  sort?: string;
-  search?: string;
-}) => {
+export const useCountries = (
+  params?: {
+    page?: number;
+    limit?: number;
+    sort?: string;
+    search?: string;
+  },
+  options?: {
+    enabled?: boolean;
+  }
+) => {
   return useQuery({
     queryKey: queryKeys.countries.list(params),
     queryFn: () => countryService.getCountries(params),
     placeholderData: (previousData) => previousData, // Keep previous data while loading
     select: selectCountriesData,
+    enabled: options?.enabled,
   });
 };
 

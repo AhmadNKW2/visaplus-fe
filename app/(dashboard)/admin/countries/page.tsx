@@ -39,6 +39,7 @@ import { IconButton } from "../../../src/components/ui/icon-button";
 import { Pagination } from "../../../src/components/ui/pagination";
 import { Filter, FilterRow, FilterValues } from "../../../src/components/common/Filter";
 import { DeleteConfirmationModal } from "../../../src/components/common/DeleteConfirmationModal";
+import { usePersistentPageSize } from "../../../src/hooks/use-persistent-page-size";
 import {
     useCountries,
     useDeleteCountry,
@@ -133,14 +134,17 @@ export default function CountriesPage() {
     });
     const [localCountries, setLocalCountries] = useState<Country[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize] = useState(10);
+    const { pageSize, setPageSize, isInitialized } = usePersistentPageSize('countries_table_page_size', 10);
     const [filterValues, setFilterValues] = useState<FilterValues>({ search: "" });
 
-    const { data, isLoading, error } = useCountries({
-        page: currentPage,
-        limit: pageSize,
-        search: filterValues.search,
-    });
+    const { data, isLoading, error } = useCountries(
+        {
+            page: currentPage,
+            limit: pageSize,
+            search: filterValues.search,
+        },
+        { enabled: isInitialized }
+    );
 
     const meta = data?.meta || {};
     const deleteMutation = useDeleteCountry();
@@ -201,6 +205,7 @@ export default function CountriesPage() {
     };
 
     const handlePageSizeChange = (size: number) => {
+        setPageSize(size);
         setCurrentPage(1);
     };
 

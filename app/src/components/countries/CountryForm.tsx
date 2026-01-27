@@ -154,12 +154,14 @@ export const CountryForm: React.FC<CountryFormProps> = ({
 
         const countryData = {
             countryWorldId: parseInt(selectedCountryWorldId),
-            attributes: attributeRows.map((row) => ({
-                attributeId: row.attributeId,
-                value_en: row.value_en,
-                value_ar: row.value_ar,
-                isActive: row.isActive,
-            })),
+            attributes: attributeRows
+                .filter((row) => row.isActive)
+                .map((row) => ({
+                    attributeId: row.attributeId,
+                    value_en: row.value_en,
+                    value_ar: row.value_ar,
+                    isActive: row.isActive,
+                })),
         };
 
         onSubmit(countryData);
@@ -257,7 +259,7 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                                 <TableHead width="20%">Attribute</TableHead>
                                 <TableHead width="35%">Value (EN)</TableHead>
                                 <TableHead width="35%">Value (AR)</TableHead>
-                                <TableHead width="10%" className="text-center!">Active</TableHead>
+                                <TableHead width="10%" className="text-center!">Inactive</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -317,12 +319,12 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                                         </TableCell>
                                         <TableCell className="text-center!">
                                             <Checkbox
-                                                checked={row.isActive}
+                                                checked={!row.isActive}
                                                 onChange={(checked) =>
                                                     handleAttributeChange(
                                                         row.attributeId,
                                                         "isActive",
-                                                        checked
+                                                        !checked
                                                     )
                                                 }
                                             />
