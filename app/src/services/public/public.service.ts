@@ -52,11 +52,13 @@ export interface PublicCountriesResponse {
 }
 
 export const publicService = {
-  getCountries: async (search?: string): Promise<PublicCountriesResponse> => {
+  getCountries: async (search?: string, limit: number = 100): Promise<PublicCountriesResponse> => {
     const queryParams = new URLSearchParams();
     if (search) {
       queryParams.append("search", search);
     }
+    queryParams.append("limit", limit.toString());
+    
     const queryString = queryParams.toString();
     const url = `${API_CONFIG.baseUrl}/countries${queryString ? `?${queryString}` : ""}`;
 

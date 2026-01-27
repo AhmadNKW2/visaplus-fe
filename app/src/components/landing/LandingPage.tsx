@@ -85,7 +85,7 @@ export default function LandingPage() {
     const fetchCountries = async () => {
       setLoading(true);
       try {
-        const response = await publicService.getCountries(debouncedSearch);
+        const response = await publicService.getCountries(debouncedSearch, 100);
         if (response.success) {
           const sorted = response.data.sort((a, b) => a.order - b.order);
           setCountries(sorted);
