@@ -155,7 +155,6 @@ export const CountryForm: React.FC<CountryFormProps> = ({
         const countryData = {
             countryWorldId: parseInt(selectedCountryWorldId),
             attributes: attributeRows
-                .filter((row) => row.isActive)
                 .map((row) => ({
                     attributeId: row.attributeId,
                     value_en: row.value_en,

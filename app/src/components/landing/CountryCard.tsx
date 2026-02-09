@@ -20,6 +20,7 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
   const [contentHeight, setContentHeight] = useState(0);
 
   const sortedAttributes = [...country.attributes]
+    .filter((attr) => attr.isActive)
     .sort((a, b) => a.attribute.order - b.attribute.order);
 
   // Measure content height whenever the card opens/closes or attributes change
