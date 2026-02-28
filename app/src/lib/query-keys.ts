@@ -94,4 +94,14 @@ export const queryKeys = {
     detail: (id: string | number) =>
       [...queryKeys.contactRequests.details(), id] as const,
   },
+
+  // About Us
+  aboutUs: {
+    all: ["about-us"] as const,
+  },
+
+  // FAQs
+  faqs: {
+    all: ["faqs"] as const,
+  },
 } as const;

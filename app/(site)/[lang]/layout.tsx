@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Lato, Almarai } from "next/font/google";
 import "../../globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, Slide } from "react-toastify";
@@ -11,19 +10,6 @@ import { LayoutContent } from "../../src/components/layout/LayoutContent";
 import { FloatingContactButtons } from "../../src/components/layout/FloatingContactButtons";
 import { Footer } from "../../src/components/layout/Footer";
 
-const lato = Lato({
-  variable: '--font-lato',
-  subsets: ['latin'],
-  weight: ['100', '300', '400', '700', '900'],
-  display: 'swap',
-});
-
-const almarai = Almarai({
-  variable: '--font-almarai',
-  subsets: ['arabic', 'latin'],
-  weight: ['300', '400', '700', '800'],
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: "Visaplus Admin Dashboard",
@@ -50,9 +36,7 @@ export default async function RootLayout({
 
   return (
     <html lang={validLang} dir={dir} className="bg-primary" suppressHydrationWarning>
-      <body
-        className={`${lato.variable} ${almarai.variable} antialiased`}
-      >
+      <body className="antialiased">
         <LanguageProvider initialLang={validLang}>
           <ToastContainer
             position="top-right"

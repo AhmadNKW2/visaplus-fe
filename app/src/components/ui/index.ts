@@ -1,4 +1,5 @@
 export { Button } from './button';
+export { RichTextEditor } from './rich-text-editor';
 export { IconButton } from './icon-button';
 export { Card } from './card';
 export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './table';

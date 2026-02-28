@@ -118,8 +118,8 @@ export const Footer = () => {
                     <div className="space-y-6">
                         <h4 className="text-lg font-semibold">{t("Quick Links", "روابط سريعة")}</h4>
                         <ul className="space-y-3 text-blue-200 text-sm">
-                            <li><a href="#" className="hover:text-white transition-colors duration-300">{t("About Us", "من نحن")}</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors duration-300">{t("FAQs", "أسئلة وأجوبة")}</a></li>
+                            <li><a href={`/${language}/about-us`} className="hover:text-white transition-colors duration-300">{t("About Us", "من نحن")}</a></li>
+                            <li><a href={`/${language}/faqs`} className="hover:text-white transition-colors duration-300">{t("FAQs", "أسئلة وأجوبة")}</a></li>
                         </ul>
                     </div>
                 </div>

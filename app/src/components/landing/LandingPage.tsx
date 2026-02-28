@@ -109,7 +109,7 @@ export default function LandingPage() {
     <div className={`min-h-screen bg-gray-50 font-lato ${language === 'ar' ? 'font-almarai' : ''}`}>
 
       {/* Navigation Bar (Glassmorphic) */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-sm border-b border-gray-200/50 transition-all duration-300 h-auto min-h-[80px]">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-sm border-b border-gray-200/50 transition-all duration-300 h-auto min-h-20">
         <div className={`max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between ${showStickySearch ? 'gap-4' : ''}`}>
           <div className="relative w-45 h-15 max-[400]:w-30">
             <a href="https://www.visaplusjo.com">
@@ -122,7 +122,7 @@ export default function LandingPage() {
           </div>
 
           {/* Sticky Search Bar - Visibility controlled by showStickySearch */}
-          <div className={`order-3 sm:order-none w-full sm:w-auto sm:flex-1 max-w-md transition-all duration-500 ease-in-out ${showStickySearch ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8 pointer-events-none h-0 sm:h-auto overflow-hidden'}`}>
+          <div className={`order-3 sm:order-0 w-full sm:w-auto sm:flex-1 max-w-md transition-all duration-500 ease-in-out ${showStickySearch ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8 pointer-events-none h-0 sm:h-auto overflow-hidden'}`}>
             <div className="relative">
               <Search className={`absolute ${isRtl ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400`} />
               <input
@@ -137,7 +137,22 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 shrink-0 order-1 sm:order-none sm:ml-0">
+          <div className="flex items-center gap-4 shrink-0 order-1 sm:order-0 sm:ml-0">
+            <nav className="hidden md:flex items-center gap-1">
+              <a
+                href={`/${language}/about-us`}
+                className="px-3 py-1.5 rounded-full text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all"
+              >
+                {t("About Us", "من نحن")}
+              </a>
+              <a
+                href={`/${language}/faqs`}
+                className="px-3 py-1.5 rounded-full text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all"
+              >
+                {t("FAQs", "الأسئلة الشائعة")}
+              </a>
+            </nav>
+            <div className="w-px h-5 bg-gray-200 hidden md:block" />
             <button
               onClick={() => setLanguage(language === "en" ? "ar" : "en")}
               className="text-sm font-bold text-[#00205b] hover:text-blue-600 active:text-black transition-colors duration-300"
@@ -214,7 +229,7 @@ export default function LandingPage() {
             </p>
             <button
               onClick={() => setSearch("")}
-              className="min-w-[150px] px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200 font-medium text-sm"
+              className="min-w-37.5 px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200 font-medium text-sm"
             >
               {t("Show All Countries", "عرض جميع الدول")}
             </button>
@@ -225,7 +240,7 @@ export default function LandingPage() {
           <div className="flex justify-center mt-12">
             <button
               onClick={() => setSearch("")}
-              className="min-w-[150px] px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200 font-medium text-sm"
+              className="min-w-37.5 px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200 font-medium text-sm"
             >
               {t("Show All Countries", "عرض جميع الدول")}
             </button>

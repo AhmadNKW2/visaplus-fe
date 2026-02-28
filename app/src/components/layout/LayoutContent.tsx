@@ -7,6 +7,7 @@
 import { usePathname } from "next/navigation";
 import { AppSidebar } from "../sidebar/app-sidebar";
 import { sidebarConfig } from "../sidebar/sidebar.config";
+import { SiteHeader } from "./SiteHeader";
 
 export const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -19,6 +20,17 @@ export const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
   const isLoginPage = pathWithoutLocale === "/admin/login";
   const isLandingPage = pathWithoutLocale === "/";
   const showSidebar = pathWithoutLocale.startsWith("/admin") && !isLoginPage;
+
+  // Non-admin site pages (about-us, faqs, etc.) get the shared SiteHeader
+  // Ensure we don't render the site header for any /admin routes (including /admin/login)
+  if (!pathWithoutLocale.startsWith("/admin") && !isLandingPage) {
+    return (
+      <>
+        <SiteHeader />
+        {children}
+      </>
+    );
+  }
 
   if (!showSidebar) {
     return <>{children}</>;

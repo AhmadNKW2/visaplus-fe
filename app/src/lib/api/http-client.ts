@@ -263,6 +263,37 @@ class HttpClient {
   }
 
   /**
+   * PUT request with FormData (for file uploads)
+   */
+  public putFormData<T>(endpoint: string, formData: FormData): Promise<T> {
+    const url = `${this.baseURL}${endpoint}`;
+
+    // Don't set Content-Type for FormData - browser will set it with boundary
+    const headers: HeadersInit = {};
+    const authHeader = (this.defaultHeaders as any).Authorization;
+    if (authHeader) {
+      headers['Authorization'] = authHeader;
+    }
+
+    return fetch(url, {
+      method: "PUT",
+      headers,
+      body: formData,
+    }).then(async (response) => {
+      if (!response.ok) {
+        await this.handleError(response);
+      }
+      const data = await response.json();
+      if (typeof window !== "undefined") {
+        const message = data.data?.message || data.message;
+        const isGenericMessage = message?.toLowerCase() === "success";
+        toast.success(isGenericMessage ? "Updated successfully!" : (message || "Updated successfully!"));
+      }
+      return data;
+    });
+  }
+
+  /**
    * Set authorization token
    */
   public setAuthToken(token: string): void {

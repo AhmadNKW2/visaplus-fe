@@ -51,6 +51,39 @@ export interface PublicCountriesResponse {
   time: string;
 }
 
+export interface PublicAboutUs {
+  id: number;
+  image: string;
+  contentEn: string;
+  contentAr: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PublicFaqItem {
+  questionEn: string;
+  questionAr: string;
+  answerEn: string;
+  answerAr: string;
+}
+
+export interface PublicFaqs {
+  id: number;
+  items: PublicFaqItem[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+const apiFetch = async <T>(path: string): Promise<T> => {
+  const url = `${API_CONFIG.baseUrl}${path}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!response.ok) throw new Error(`Failed to fetch ${path}`);
+  return response.json();
+};
+
 export const publicService = {
   getCountries: async (search?: string, limit: number = 100): Promise<PublicCountriesResponse> => {
     const queryParams = new URLSearchParams();
@@ -74,5 +107,13 @@ export const publicService = {
     }
 
     return response.json();
+  },
+
+  getAboutUs: async (): Promise<{ data: PublicAboutUs; message: string }> => {
+    return apiFetch("/about-us");
+  },
+
+  getFaqs: async (): Promise<{ data: PublicFaqs; message: string }> => {
+    return apiFetch("/faqs");
   },
 };

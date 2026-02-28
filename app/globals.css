@@ -138,4 +138,21 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.2);
   }
+
+  /* Rich-text content rendered from Tiptap HTML */
+  .rich-content p { margin-bottom: 0.5rem; }
+  .rich-content p:last-child { margin-bottom: 0; }
+  .rich-content strong { font-weight: 700; }
+  .rich-content em { font-style: italic; }
+  .rich-content ul {
+    list-style-type: disc;
+    padding-inline-start: 1.25rem;
+    margin: 0.25rem 0;
+  }
+  .rich-content ol {
+    list-style-type: decimal;
+    padding-inline-start: 1.25rem;
+    margin: 0.25rem 0;
+  }
+  .rich-content li { margin: 0.15rem 0; }
 }
