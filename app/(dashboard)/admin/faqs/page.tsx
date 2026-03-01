@@ -5,7 +5,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   DndContext,
   closestCenter,
@@ -46,19 +46,64 @@ function generateId() {
   return Math.random().toString(36).slice(2);
 }
 
+/** Strip HTML tags and return trimmed plain text */
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, "").trim();
+}
+
+/** Error key format: `${_id}_${fieldName}` */
+function errKey(id: string, field: keyof FaqItem): string {
+  return `${id}_${field}`;
+}
+
+const REQUIRED_MSG = "This field is required";
+
+/** Validate a single FAQ item. Returns a map of error keys → message. */
+function validateItem(item: FaqItemWithId): Record<string, string> {
+  const errs: Record<string, string> = {};
+  const fields: (keyof FaqItem)[] = ["questionEn", "questionAr", "answerEn", "answerAr"];
+  for (const field of fields) {
+    const raw = item[field] ?? "";
+    const empty = field.startsWith("answer") ? stripHtml(raw) === "" : raw.trim() === "";
+    if (empty) errs[errKey(item._id, field)] = REQUIRED_MSG;
+  }
+  return errs;
+}
+
+/** Scroll the main overflow container to the element that matches the first error key */
+function scrollToFirstError(errs: Record<string, string>) {
+  const firstKey = Object.keys(errs)[0];
+  if (!firstKey) return;
+  const id = firstKey.split("_")[0]; // _id is base-36 alphanumeric — no underscores
+  setTimeout(() => {
+    const card = document.getElementById(`faq-card-${id}`);
+    if (card) {
+      card.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, 50);
+}
+
 // Sortable FAQ card component
 function SortableFaqCard({
   item,
   index,
+  errors,
   onUpdate,
   onDelete,
 }: {
   item: FaqItemWithId;
   index: number;
+  errors: Record<string, string>;
   onUpdate: (id: string, field: keyof FaqItem, value: string) => void;
   onDelete: (id: string) => void;
 }) {
+  const hasErrors = Object.keys(errors).some((k) => k.startsWith(item._id));
+
+  // Auto-expand if there are validation errors for this card
   const [expanded, setExpanded] = useState(true);
+  useEffect(() => {
+    if (hasErrors) setExpanded(true);
+  }, [hasErrors]);
 
   const {
     attributes,
@@ -77,6 +122,7 @@ function SortableFaqCard({
 
   return (
     <div
+      id={`faq-card-${item._id}`}
       ref={setNodeRef}
       style={style}
       className={`bg-secondary rounded-rounded1 border-2 overflow-hidden transition-shadow ${
@@ -135,6 +181,7 @@ function SortableFaqCard({
               onChange={(e) => onUpdate(item._id, "questionEn", e.target.value)}
               placeholder="What is...?"
               label="Question_EN"
+              error={errors[errKey(item._id, "questionEn")]}
             />
             <RichTextEditor
               value={item.answerEn}
@@ -142,6 +189,7 @@ function SortableFaqCard({
               dir="ltr"
               label="Answer_EN"
               placeholder="The answer is..."
+              error={errors[errKey(item._id, "answerEn")]}
             />
           </div>
 
@@ -154,6 +202,7 @@ function SortableFaqCard({
               placeholder="ما هو...؟"
               label="Question_AR"
               isRtl
+              error={errors[errKey(item._id, "questionAr")]}
             />
             <RichTextEditor
               value={item.answerAr}
@@ -161,6 +210,7 @@ function SortableFaqCard({
               dir="rtl"
               label="Answer_AR"
               placeholder="الإجابة هي..."
+              error={errors[errKey(item._id, "answerAr")]}
             />
           </div>
         </div>
@@ -174,6 +224,7 @@ export default function FaqsPage() {
   const { mutate: updateFaqs, isPending: isSaving } = useUpdateFaqs();
 
   const [items, setItems] = useState<FaqItemWithId[]>([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Populate items when data loads
   useEffect(() => {
@@ -202,30 +253,69 @@ export default function FaqsPage() {
     }
   };
 
+  /** Scroll the overflow-auto <main> to the bottom */
+  const scrollToBottom = useCallback(() => {
+    setTimeout(() => {
+      const main = document.querySelector("main");
+      if (main) main.scrollTo({ top: main.scrollHeight, behavior: "smooth" });
+    }, 50);
+  }, []);
+
   const handleAddItem = () => {
+    // Validate last item before allowing a new one
+    if (items.length > 0) {
+      const last = items[items.length - 1];
+      const itemErrors = validateItem(last);
+      if (Object.keys(itemErrors).length > 0) {
+        setErrors(itemErrors);
+        scrollToFirstError(itemErrors);
+        return;
+      }
+    }
+
+    const newId = generateId();
+    setErrors({});
     setItems((prev) => [
       ...prev,
-      {
-        _id: generateId(),
-        questionEn: "",
-        questionAr: "",
-        answerEn: "",
-        answerAr: "",
-      },
+      { _id: newId, questionEn: "", questionAr: "", answerEn: "", answerAr: "" },
     ]);
+    scrollToBottom();
   };
 
   const handleUpdate = (id: string, field: keyof FaqItem, value: string) => {
     setItems((prev) =>
       prev.map((item) => (item._id === id ? { ...item, [field]: value } : item))
     );
+    // Clear error for this specific field as user types
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[errKey(id, field)];
+      return next;
+    });
   };
 
   const handleDelete = (id: string) => {
     setItems((prev) => prev.filter((item) => item._id !== id));
+    // Clear errors belonging to this item
+    setErrors((prev) => {
+      const next = { ...prev };
+      Object.keys(next).forEach((k) => { if (k.startsWith(id)) delete next[k]; });
+      return next;
+    });
   };
 
   const handleSave = () => {
+    // Validate all items
+    const allErrors: Record<string, string> = {};
+    items.forEach((item) => Object.assign(allErrors, validateItem(item)));
+
+    if (Object.keys(allErrors).length > 0) {
+      setErrors(allErrors);
+      scrollToFirstError(allErrors);
+      return;
+    }
+
+    setErrors({});
     const payload = items.map(({ _id: _ignored, ...rest }) => rest);
     updateFaqs(payload);
   };
@@ -317,6 +407,7 @@ export default function FaqsPage() {
                 key={item._id}
                 item={item}
                 index={index}
+                errors={errors}
                 onUpdate={handleUpdate}
                 onDelete={handleDelete}
               />
@@ -329,7 +420,11 @@ export default function FaqsPage() {
       <div className="fixed bottom-8 end-8 flex flex-col items-center gap-3 z-50">
         {/* Go to top */}
         <button
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() => {
+            const main = document.querySelector("main");
+            if (main) main.scrollTo({ top: 0, behavior: "smooth" });
+            else window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
           className="w-11 h-11 rounded-full bg-secondary border-2 border-primary shadow-lg flex items-center justify-center text-fourth hover:bg-primary hover:border-fourth transition-all hover:scale-105 active:scale-95"
           title="Go to top"
         >
