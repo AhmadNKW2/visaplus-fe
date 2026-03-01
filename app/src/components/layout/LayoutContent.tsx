@@ -22,8 +22,7 @@ export const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
   const showSidebar = pathWithoutLocale.startsWith("/admin") && !isLoginPage;
 
   // Non-admin site pages (about-us, faqs, etc.) get the shared SiteHeader
-  // Ensure we don't render the site header for any /admin routes (including /admin/login)
-  if (!pathWithoutLocale.startsWith("/admin") && !isLandingPage) {
+  if (!showSidebar && !isLandingPage && !isLoginPage) {
     return (
       <>
         <SiteHeader />
