@@ -43,7 +43,7 @@ function FaqAccordion({
           {index + 1}
         </span>
 
-        <span className="flex-1 text-gray-800 font-semibold text-sm leading-relaxed">
+        <span className="flex-1 text-gray-800 font-semibold text-md leading-relaxed">
           {question}
         </span>
 
@@ -68,7 +68,7 @@ function FaqAccordion({
               <div className={`ms-12 ${isRtl ? "me-0" : "me-8"}`}>
                 <div className="h-px bg-gray-100 mb-4" />
                 <div
-                  className={`rich-content text-gray-600 text-sm leading-relaxed ${
+                  className={`rich-content text-gray-600 text-md leading-relaxed ${
                     isRtl ? "font-[Almarai,sans-serif]" : ""
                   }`}
                   dangerouslySetInnerHTML={{ __html: answer }}
