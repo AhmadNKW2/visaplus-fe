@@ -43,7 +43,7 @@ export default function AboutUsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50" dir={isRtl ? "rtl" : "ltr"}>
+    <main className="min-h-screen bg-gray-50 pb-10" dir={isRtl ? "rtl" : "ltr"}>
 
       {/* ── Hero ── */}
       <section className="relative w-full overflow-hidden bg-slate-900 px-4 pb-32 pt-14 sm:px-6 sm:pt-20 lg:px-8">
@@ -160,108 +160,6 @@ export default function AboutUsPage() {
         </motion.div>
       </section>
 
-      {/* ── Stats strip ── */}
-      <section className="max-w-3xl mx-auto px-6 mt-6">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="grid grid-cols-3 gap-4"
-        >
-          {[
-            { value: "5+", label: t("Years Experience", "سنوات خبرة"), icon: "📅" },
-            { value: "10K+", label: t("Clients Served", "عميل تم خدمتهم"), icon: "👥" },
-            { value: "50+", label: t("Countries", "دولة"), icon: "🌍" },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl p-5 text-center shadow-sm border border-gray-100 hover:shadow-md hover:border-fourth/20 transition-all"
-            >
-              <div className="text-2xl mb-1">{stat.icon}</div>
-              <p className="text-2xl font-extrabold text-fourth leading-none">{stat.value}</p>
-              <p className="text-xs text-gray-500 mt-1.5 leading-snug">{stat.label}</p>
-            </div>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* ── Values section ── */}
-      <section className="mt-20 py-20 bg-white border-t border-gray-100">
-        <div className="max-w-5xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55 }}
-            className="text-center mb-14"
-          >
-            <span className="inline-block px-4 py-1 rounded-full bg-fourth/8 border border-fourth/15 text-fourth text-xs font-semibold tracking-wider uppercase mb-4">
-              {t("What drives us", "ما يحركنا")}
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-              {t("Our Core Values", "قيمنا الأساسية")}
-            </h2>
-            <p className="text-gray-500 max-w-lg mx-auto text-sm leading-relaxed">
-              {t(
-                "Everything we do is guided by our commitment to quality, trust, and excellence.",
-                "كل ما نفعله يسترشد بالتزامنا بالجودة والثقة والتميز."
-              )}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {[
-              {
-                icon: "🎯",
-                color: "bg-rose-50 border-rose-100",
-                iconBg: "bg-rose-100",
-                title: t("Mission-Driven", "موجهون بالمهمة"),
-                desc: t(
-                  "We exist to make visa applications seamless and stress-free for everyone.",
-                  "نحن موجودون لجعل طلبات التأشيرة سلسة وخالية من التوتر للجميع."
-                ),
-              },
-              {
-                icon: "🤝",
-                color: "bg-violet-50 border-violet-100",
-                iconBg: "bg-violet-100",
-                title: t("Client-First", "العميل أولاً"),
-                desc: t(
-                  "Every decision we make is centered around the best outcome for our clients.",
-                  "كل قرار نتخذه يتمحور حول أفضل نتيجة لعملائنا."
-                ),
-              },
-              {
-                icon: "🌍",
-                color: "bg-emerald-50 border-emerald-100",
-                iconBg: "bg-emerald-100",
-                title: t("Global Reach", "وصول عالمي"),
-                desc: t(
-                  "We serve clients across the globe with expertise in 50+ destination countries.",
-                  "نخدم العملاء في جميع أنحاء العالم بخبرة في أكثر من 50 دولة مقصد."
-                ),
-              },
-            ].map((card, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className={`rounded-2xl p-7 border ${card.color} hover:shadow-lg transition-all group`}
-              >
-                <div className={`w-12 h-12 rounded-xl ${card.iconBg} flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform`}>
-                  {card.icon}
-                </div>
-                <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-fourth transition-colors">
-                  {card.title}
-                </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{card.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
     </main>
   );
 }

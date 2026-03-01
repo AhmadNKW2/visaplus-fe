@@ -16,12 +16,14 @@ interface ContactRequestModalProps {
     isOpen: boolean;
     onClose: () => void;
     selectedCountry?: Country;
+    destinationLabel?: { en: string; ar: string };
 }
 
 export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
     isOpen,
     onClose,
     selectedCountry,
+    destinationLabel,
 }) => {
     const { t, language } = useLanguage();
     const isRtl = language === 'ar';
@@ -246,7 +248,9 @@ export const ContactRequestModal: React.FC<ContactRequestModalProps> = ({
                                     </div>
 
                                     <div className="space-y-1">
-                                        <label className="text-xs font-semibold text-gray-500 uppercase">{t("Destination", "الوجهة")}</label>
+                                        <label className="text-xs font-semibold text-gray-500 uppercase">
+                                            {destinationLabel ? t(destinationLabel.en, destinationLabel.ar) : t("Destination", "الوجهة")}
+                                        </label>
                                         <Input
                                             value={formData.destination}
                                             onChange={(e) => handleChange('destination', e.target.value)}

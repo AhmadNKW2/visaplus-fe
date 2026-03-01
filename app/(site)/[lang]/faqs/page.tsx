@@ -251,7 +251,11 @@ export default function FaqsPage() {
         </div>
       </section>
 
-      <ContactRequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <ContactRequestModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        destinationLabel={{ en: "What is your question?", ar: "ما هو سؤالك؟" }}
+      />
     </main>
   );
 }

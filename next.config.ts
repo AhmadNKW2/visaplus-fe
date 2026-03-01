@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'visaplus-be-production.up.railway.app',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'flagcdn.com',
         pathname: '/**',
       },
