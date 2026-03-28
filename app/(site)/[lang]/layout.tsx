@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   verification: {
-    google: "L2PAwok68PQfIxmJGQnZa1CYq0",
+    google: "L2PAwok68PQfIxmJGQnZa1CYqQlduHHNC9qsH18f8_Q",
   },
   alternates: {
     canonical: "https://www.visaplusjo.com",
