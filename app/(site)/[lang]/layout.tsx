@@ -41,17 +41,21 @@ export const metadata: Metadata = {
     title: "VISA Plus Center | Professional Visa Services",
     description: "سافر حول العالم بكل سهولة. خدمات تأشيرة احترافية لوجهتك القادمة.",
     siteName: "VISA Plus Center",
-    images: [{ url: "/Logo-Icon.svg" }],
+    images: [{ url: "https://www.visaplusjo.com/Logo-Icon.png" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "VISA Plus Center",
     description: "Travel the world with ease. Professional visa services.",
-    images: ["/Logo-Icon.svg"],
+    images: ["https://www.visaplusjo.com/Logo-Icon.png"],
+
   },
   robots: {
     index: true,
     follow: true,
+  },
+  verification: {
+    google: "L2PAwok68PQfIxmJGQnZa1CYq0",
   },
   alternates: {
     canonical: "https://www.visaplusjo.com",
