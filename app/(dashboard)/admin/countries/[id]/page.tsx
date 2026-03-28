@@ -38,6 +38,7 @@ export default function EditCountryPage() {
         // Send full country data with PUT request
         const fullCountryData = {
             countryWorldId: data.countryWorldId,
+            price: data.price,
             attributes: data.attributes.map((attr: any) => ({
                 attributeId: attr.attributeId,
                 value_en: attr.value_en,
@@ -98,6 +99,7 @@ export default function EditCountryPage() {
             countriesWorld={countriesWorld || []}
             attributes={attributes}
             initialCountryWorldId={country.countryWorldId}
+            initialPrice={country.price}
             initialAttributes={transformedAttributes}
             onSubmit={handleSubmit}
             onCancel={handleCancel}

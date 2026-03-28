@@ -13,11 +13,23 @@ interface CountryCardProps {
   onApply: () => void;
 }
 
+const SCHENGEN_COUNTRIES = [
+  "Austria", "Belgium", "Bulgaria", "Croatia", "Czech Republic", "Czechia", 
+  "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", 
+  "Iceland", "Italy", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", 
+  "Malta", "Netherlands", "Norway", "Poland", "Portugal", "Romania", 
+  "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland"
+];
+
 export default function CountryCard({ country, isOpen, onToggle, onApply }: CountryCardProps) {
   const { language, t } = useLanguage();
   const isRtl = language === 'ar';
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(0);
+
+  const isSchengen = SCHENGEN_COUNTRIES.some(
+    c => country.countryWorld.name_en.toLowerCase().includes(c.toLowerCase())
+  );
 
   const sortedAttributes = [...country.attributes]
     .filter((attr) => attr.isActive)
@@ -81,10 +93,26 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-80" />
 
-          <div className="absolute bottom-0 left-0 right-0 p-4 text-white z-10">
-            <h3 className={`text-2xl font-bold ${isRtl ? 'font-almarai' : ''}`}>
+          {isSchengen && (
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-blue-900/90 text-white backdrop-blur-sm px-2 py-1 rounded-sm shadow-md z-10 border border-blue-400/30">
+              <span className="text-[10px] font-bold tracking-widest uppercase">
+                {t("Schengen", "شنغن")}
+              </span>
+            </div>
+          )}
+
+          <div className="absolute bottom-0 left-0 right-0 p-4 flex justify-between items-end w-full text-white z-10">
+            <h3 className={`text-2xl font-bold max-w-[70%] ${isRtl ? 'font-almarai' : ''}`}>
               {isRtl ? country.countryWorld.name_ar : country.countryWorld.name_en}
             </h3>
+            
+            {country.price != null && (
+              <div className="flex flex-col items-end shrink-0">
+                <span className="text-xs font-bold text-[#c02033] bg-white px-2.5 py-1 rounded-md shadow-lg shadow-black/20 rtl:flex-row-reverse">
+                  {country.price} {isRtl ? 'دينار' : 'JD'}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

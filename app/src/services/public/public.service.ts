@@ -3,6 +3,7 @@ import { API_CONFIG } from "../../lib/constants";
 export interface PublicCountry {
   id: number;
   countryWorldId: number;
+  price?: number;
   order: number;
   countryWorld: {
     id: number;

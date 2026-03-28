@@ -101,6 +101,7 @@ function SortableRow({
             </TableCell>
             <TableCell>{country.countryWorld?.name_en || "-"}</TableCell>
             <TableCell>{country.countryWorld?.name_ar || "-"}</TableCell>
+            <TableCell>{country.price != null ? `${country.price} JD` : "Free/Not Set"}</TableCell>
             <TableCell>
                 <div className="flex items-center justify-start gap-2">
                     {/* Edit Button */}
@@ -298,10 +299,11 @@ export default function CountriesPage() {
                                     <TableRow>
                                         <TableHead width="5%">Order</TableHead>
                                         <TableHead width="10%">ID</TableHead>
-                                        <TableHead width="20%">Flag</TableHead>
-                                        <TableHead width="25%">Name (English)</TableHead>
+                                        <TableHead width="15%">Flag</TableHead>
+                                        <TableHead width="20%">Name (English)</TableHead>
                                         <TableHead width="20%">Name (Arabic)</TableHead>
-                                        <TableHead width="20%">Actions</TableHead>
+                                        <TableHead width="15%">Price</TableHead>
+                                        <TableHead width="15%">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>

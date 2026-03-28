@@ -31,8 +31,9 @@ interface CountryFormProps {
     countriesWorld: any[];
     attributes: any[];
     initialCountryWorldId?: number;
+    initialPrice?: number;
     initialAttributes?: { attributeId: number; value_en: string; value_ar: string; isActive: boolean }[];
-    onSubmit: (data: { countryWorldId: number; attributes: any[] }) => void;
+    onSubmit: (data: { countryWorldId: number; price?: number; attributes: any[] }) => void;
     onCancel: () => void;
     isSubmitting: boolean;
     submitButtonText: string;
@@ -42,6 +43,7 @@ export const CountryForm: React.FC<CountryFormProps> = ({
     countriesWorld,
     attributes,
     initialCountryWorldId,
+    initialPrice,
     initialAttributes,
     onSubmit,
     onCancel,
@@ -50,6 +52,9 @@ export const CountryForm: React.FC<CountryFormProps> = ({
 }) => {
     const [selectedCountryWorldId, setSelectedCountryWorldId] = useState<string>(
         initialCountryWorldId?.toString() || ""
+    );
+    const [price, setPrice] = useState<string>(
+        initialPrice?.toString() || ""
     );
     const [attributeRows, setAttributeRows] = useState<AttributeRow[]>([]);
 
@@ -98,7 +103,10 @@ export const CountryForm: React.FC<CountryFormProps> = ({
         if (initialCountryWorldId) {
             setSelectedCountryWorldId(initialCountryWorldId.toString());
         }
-    }, [initialCountryWorldId]);
+        if (initialPrice !== undefined) {
+            setPrice(initialPrice.toString());
+        }
+    }, [initialCountryWorldId, initialPrice]);
 
     // Ensure countriesWorld is an array before using array methods
     const safeCountriesWorld = Array.isArray(countriesWorld) ? countriesWorld : [];
@@ -152,8 +160,11 @@ export const CountryForm: React.FC<CountryFormProps> = ({
             return;
         }
 
+        const parsedPrice = price ? parseFloat(price) : undefined;
+
         const countryData = {
             countryWorldId: parseInt(selectedCountryWorldId),
+            price: parsedPrice,
             attributes: attributeRows
                 .map((row) => ({
                     attributeId: row.attributeId,
@@ -220,6 +231,20 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                             search
                             error={errors.countryWorldId}
                             name="countryWorldId"
+                        />
+                    </div>
+
+                    {/* Price Input */}
+                    <div>
+                        <Input
+                            label="Price"
+                            type="number"
+                            step="0.01"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            placeholder="Enter country price"
+                            name="price"
+                            error={errors.price}
                         />
                     </div>
 
