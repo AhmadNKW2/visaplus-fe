@@ -245,29 +245,29 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Apply Price Input */}
+                        {/* Office Fees Input */}
                         <div>
                             <Input
-                                label="Apply Price"
+                                label="Office Fees"
                                 type="number"
                                 step="0.01"
                                 value={applyPrice}
                                 onChange={(e) => setApplyPrice(e.target.value)}
-                                placeholder="Enter apply price"
+                                placeholder="Enter office fees"
                                 name="applyPrice"
                                 error={errors.applyPrice}
                             />
                         </div>
 
-                        {/* Visa Price Input */}
+                        {/* Visa Fees Input */}
                         <div>
                             <Input
-                                label="Visa Price"
+                                label="Visa Fees"
                                 type="number"
                                 step="0.01"
                                 value={visaPrice}
                                 onChange={(e) => setVisaPrice(e.target.value)}
-                                placeholder="Enter visa price"
+                                placeholder="Enter visa fees"
                                 name="visaPrice"
                                 error={errors.visaPrice}
                             />

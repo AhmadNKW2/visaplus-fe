@@ -114,7 +114,7 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
             {country.applyPrice != null && (
               <div className="flex flex-col gap-1 justify-center">
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  {t("Apply price", "سعر التقديم")}
+                  {t("Office Fees", "رسوم التقديم")}
                 </span>
                 <div className="flex items-baseline gap-1">
                   <span className="text-lg font-black text-[#c02033] tracking-tight leading-none">
@@ -134,7 +134,7 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
             {country.visaPrice != null && (
               <div className="flex flex-col gap-1 justify-center">
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  {t("Visa price", "سعر التأشيرة")}
+                  {t("Visa Fees", "رسوم الفيزا")}
                 </span>
                 <div className="flex items-baseline gap-1">
                   <span className="text-lg font-black text-gray-800 tracking-tight leading-none">

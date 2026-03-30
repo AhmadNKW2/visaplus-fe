@@ -303,8 +303,8 @@ export default function CountriesPage() {
                                         <TableHead width="15%">Flag</TableHead>
                                         <TableHead width="20%">Name (English)</TableHead>
                                         <TableHead width="20%">Name (Arabic)</TableHead>
-                                        <TableHead width="10%">Apply Price</TableHead>
-                                        <TableHead width="10%">Visa Price</TableHead>
+                                        <TableHead width="10%">Office Fees</TableHead>
+                                        <TableHead width="10%">Visa Fees</TableHead>
                                         <TableHead width="10%">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
