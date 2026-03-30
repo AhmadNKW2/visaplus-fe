@@ -114,10 +114,10 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
             {country.applyPrice != null && (
               <div className="flex flex-col gap-1 justify-center">
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  {t("Apply price", "سعر الطلب")}
+                  {t("Apply price", "سعر التقديم")}
                 </span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-2xl font-black text-[#c02033] tracking-tight leading-none">
+                  <span className="text-lg font-black text-[#c02033] tracking-tight leading-none">
                     {country.applyPrice}
                   </span>
                   <span className="text-sm font-bold text-[#c02033]/80 leading-none">
@@ -137,7 +137,7 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
                   {t("Visa price", "سعر التأشيرة")}
                 </span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-2xl font-black text-gray-800 tracking-tight leading-none">
+                  <span className="text-lg font-black text-gray-800 tracking-tight leading-none">
                     {country.visaPrice}
                   </span>
                   <span className="text-sm font-bold text-gray-500 leading-none">
