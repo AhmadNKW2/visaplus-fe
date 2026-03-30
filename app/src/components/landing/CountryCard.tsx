@@ -101,20 +101,53 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
             </div>
           )}
 
-          <div className="absolute bottom-0 left-0 right-0 p-4 flex justify-between items-end w-full text-white z-10">
-            <h3 className={`text-2xl font-bold max-w-[70%] ${isRtl ? 'font-almarai' : ''}`}>
+          <div className="absolute bottom-0 left-0 right-0 py-3 px-4 flex flex-col justify-end w-full whitespace-normal z-10 text-white">
+            <h3 className={`text-2xl font-bold leading-tight drop-shadow-md mb-1 ${isRtl ? 'font-almarai' : ''}`}>
               {isRtl ? country.countryWorld.name_ar : country.countryWorld.name_en}
             </h3>
-            
-            {country.price != null && (
-              <div className="flex flex-col items-end shrink-0">
-                <span className="text-xs font-bold text-[#c02033] bg-white px-2.5 py-1 rounded-md shadow-lg shadow-black/20 rtl:flex-row-reverse">
-                  {country.price} {isRtl ? 'دينار' : 'JD'}
+          </div>
+        </div>
+
+        {/* Pricing Layout - Modern Split View */}
+        {(country.applyPrice != null || country.visaPrice != null) && (
+          <div className="bg-white px-2 py-2 flex gap-5 items-center justify-evenly border-b border-gray-100 relative z-10">
+            {country.applyPrice != null && (
+              <div className="flex flex-col gap-1 justify-center">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  {t("Apply price", "سعر الطلب")}
                 </span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-2xl font-black text-[#c02033] tracking-tight leading-none">
+                    {country.applyPrice}
+                  </span>
+                  <span className="text-sm font-bold text-[#c02033]/80 leading-none">
+                    {isRtl ? 'دينار' : 'JD'}
+                  </span>
+                </div>
+              </div>
+            )}
+            
+            {(country.applyPrice != null && country.visaPrice != null) && (
+              <div className="w-px h-10 bg-gray-200 opacity-70"></div>
+            )}
+
+            {country.visaPrice != null && (
+              <div className="flex flex-col gap-1 justify-center">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  {t("Visa price", "سعر التأشيرة")}
+                </span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-2xl font-black text-gray-800 tracking-tight leading-none">
+                    {country.visaPrice}
+                  </span>
+                  <span className="text-sm font-bold text-gray-500 leading-none">
+                    {isRtl ? 'دينار' : 'JD'}
+                  </span>
+                </div>
               </div>
             )}
           </div>
-        </div>
+        )}
 
         <div
           className="bg-white overflow-hidden transition-[height,opacity] duration-300 ease-out"

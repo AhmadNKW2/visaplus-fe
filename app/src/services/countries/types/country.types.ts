@@ -19,7 +19,8 @@ export interface CountryAttribute {
 export interface Country {
   id: number;
   countryWorldId: number;
-  price?: number;
+  applyPrice?: number;
+  visaPrice?: number;
   countryWorld?: CountryWorld;
   attributes: CountryAttribute[];
   order: number;
@@ -29,13 +30,15 @@ export interface Country {
 
 export interface CreateCountryDto {
   countryWorldId: number;
-  price?: number;
+  applyPrice?: number;
+  visaPrice?: number;
   attributes: CountryAttribute[];
 }
 
 export interface UpdateCountryDto {
   countryWorldId?: number;
-  price?: number;
+  applyPrice?: number;
+  visaPrice?: number;
   attributes?: CountryAttribute[];
 }
 

@@ -31,9 +31,10 @@ interface CountryFormProps {
     countriesWorld: any[];
     attributes: any[];
     initialCountryWorldId?: number;
-    initialPrice?: number;
+    initialApplyPrice?: number;
+    initialVisaPrice?: number;
     initialAttributes?: { attributeId: number; value_en: string; value_ar: string; isActive: boolean }[];
-    onSubmit: (data: { countryWorldId: number; price?: number; attributes: any[] }) => void;
+    onSubmit: (data: { countryWorldId: number; applyPrice?: number; visaPrice?: number; attributes: any[] }) => void;
     onCancel: () => void;
     isSubmitting: boolean;
     submitButtonText: string;
@@ -43,7 +44,8 @@ export const CountryForm: React.FC<CountryFormProps> = ({
     countriesWorld,
     attributes,
     initialCountryWorldId,
-    initialPrice,
+    initialApplyPrice,
+    initialVisaPrice,
     initialAttributes,
     onSubmit,
     onCancel,
@@ -53,8 +55,11 @@ export const CountryForm: React.FC<CountryFormProps> = ({
     const [selectedCountryWorldId, setSelectedCountryWorldId] = useState<string>(
         initialCountryWorldId?.toString() || ""
     );
-    const [price, setPrice] = useState<string>(
-        initialPrice?.toString() || ""
+    const [applyPrice, setApplyPrice] = useState<string>(
+        initialApplyPrice !== undefined && initialApplyPrice !== null ? initialApplyPrice.toString() : ""
+    );
+    const [visaPrice, setVisaPrice] = useState<string>(
+        initialVisaPrice !== undefined && initialVisaPrice !== null ? initialVisaPrice.toString() : ""
     );
     const [attributeRows, setAttributeRows] = useState<AttributeRow[]>([]);
 
@@ -103,10 +108,13 @@ export const CountryForm: React.FC<CountryFormProps> = ({
         if (initialCountryWorldId) {
             setSelectedCountryWorldId(initialCountryWorldId.toString());
         }
-        if (initialPrice !== undefined) {
-            setPrice(initialPrice.toString());
+        if (initialApplyPrice !== undefined && initialApplyPrice !== null) {
+            setApplyPrice(initialApplyPrice.toString());
         }
-    }, [initialCountryWorldId, initialPrice]);
+        if (initialVisaPrice !== undefined && initialVisaPrice !== null) {
+            setVisaPrice(initialVisaPrice.toString());
+        }
+    }, [initialCountryWorldId, initialApplyPrice, initialVisaPrice]);
 
     // Ensure countriesWorld is an array before using array methods
     const safeCountriesWorld = Array.isArray(countriesWorld) ? countriesWorld : [];
@@ -160,11 +168,13 @@ export const CountryForm: React.FC<CountryFormProps> = ({
             return;
         }
 
-        const parsedPrice = price ? parseFloat(price) : undefined;
+        const parsedApplyPrice = applyPrice ? parseFloat(applyPrice) : undefined;
+        const parsedVisaPrice = visaPrice ? parseFloat(visaPrice) : undefined;
 
         const countryData = {
             countryWorldId: parseInt(selectedCountryWorldId),
-            price: parsedPrice,
+            applyPrice: parsedApplyPrice,
+            visaPrice: parsedVisaPrice,
             attributes: attributeRows
                 .map((row) => ({
                     attributeId: row.attributeId,
@@ -234,18 +244,34 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                         />
                     </div>
 
-                    {/* Price Input */}
-                    <div>
-                        <Input
-                            label="Price"
-                            type="number"
-                            step="0.01"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
-                            placeholder="Enter country price"
-                            name="price"
-                            error={errors.price}
-                        />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Apply Price Input */}
+                        <div>
+                            <Input
+                                label="Apply Price"
+                                type="number"
+                                step="0.01"
+                                value={applyPrice}
+                                onChange={(e) => setApplyPrice(e.target.value)}
+                                placeholder="Enter apply price"
+                                name="applyPrice"
+                                error={errors.applyPrice}
+                            />
+                        </div>
+
+                        {/* Visa Price Input */}
+                        <div>
+                            <Input
+                                label="Visa Price"
+                                type="number"
+                                step="0.01"
+                                value={visaPrice}
+                                onChange={(e) => setVisaPrice(e.target.value)}
+                                placeholder="Enter visa price"
+                                name="visaPrice"
+                                error={errors.visaPrice}
+                            />
+                        </div>
                     </div>
 
                     {/* Country Preview */}
