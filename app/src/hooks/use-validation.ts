@@ -68,8 +68,9 @@ export const useValidation = (initialLanguage: string = 'en'): UseValidationRetu
             }
         }
         if (rule === 'isNum') {
-            // Only numbers allowed
-            if (value && typeof value === 'string' && !/^\d+$/.test(value)) {
+            // Only numbers allowed, including Arabic numerals (٠-٩, ۰-۹), spaces, +, and dashes
+            const numRegex = /^[\+\- \(\)0-9\u0660-\u0669\u06F0-\u06F9]+$/;
+            if (value && typeof value === 'string' && !numRegex.test(value)) {
                 return getErrorMessage('isNum', lang);
             }
         }
