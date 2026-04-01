@@ -27,6 +27,19 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(0);
 
+  const getPriceDisplay = (price?: number | null) => {
+    const numericPrice = Number(price);
+    const isFree = price != null && Number.isFinite(numericPrice) && numericPrice === 0;
+
+    return {
+      label: isFree ? t("Free", "مجانا") : price,
+      showCurrency: !isFree,
+    };
+  };
+
+  const applyPriceDisplay = getPriceDisplay(country.applyPrice);
+  const visaPriceDisplay = getPriceDisplay(country.visaPrice);
+
   const isSchengen = SCHENGEN_COUNTRIES.some(
     c => country.countryWorld.name_en.toLowerCase().includes(c.toLowerCase())
   );
@@ -114,15 +127,17 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
             {country.applyPrice != null && (
               <div className="flex flex-col gap-1 justify-center">
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  {t("Office Fees", "رسوم التقديم")}
+                  {t("Office Fees", "رسوم المكتب")}
                 </span>
                 <div className="flex items-baseline gap-1">
                   <span className="text-lg font-black text-[#c02033] tracking-tight leading-none">
-                    {country.applyPrice}
+                    {applyPriceDisplay.label}
                   </span>
-                  <span className="text-sm font-bold text-[#c02033]/80 leading-none">
-                    {isRtl ? 'دينار' : 'JD'}
-                  </span>
+                  {applyPriceDisplay.showCurrency && (
+                    <span className="text-sm font-bold text-[#c02033]/80 leading-none">
+                      {isRtl ? 'دينار' : 'JD'}
+                    </span>
+                  )}
                 </div>
               </div>
             )}
@@ -134,15 +149,17 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
             {country.visaPrice != null && (
               <div className="flex flex-col gap-1 justify-center">
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  {t("Visa Fees", "رسوم الفيزا")}
+                  {t("Visa Fees", "رسوم السفارة")}
                 </span>
                 <div className="flex items-baseline gap-1">
                   <span className="text-lg font-black text-gray-800 tracking-tight leading-none">
-                    {country.visaPrice}
+                    {visaPriceDisplay.label}
                   </span>
-                  <span className="text-sm font-bold text-gray-500 leading-none">
-                    {isRtl ? 'دينار' : 'JD'}
-                  </span>
+                  {visaPriceDisplay.showCurrency && (
+                    <span className="text-sm font-bold text-gray-500 leading-none">
+                      {isRtl ? 'دينار' : 'JD'}
+                    </span>
+                  )}
                 </div>
               </div>
             )}
