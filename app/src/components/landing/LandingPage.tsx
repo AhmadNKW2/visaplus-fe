@@ -8,13 +8,12 @@ import { ContactRequestModal } from "./ContactRequestModal";
 import CountryCard from "./CountryCard";
 import { HeroSection } from "./HeroSection";
 import { AnimatePresence, motion } from "framer-motion";
-import { Search, Phone, Mail, MapPin } from "lucide-react";
+import { Search } from "lucide-react";
 import Image from "next/image";
 
 export default function LandingPage() {
   const { language, setLanguage, t } = useLanguage();
   const isRtl = language === 'ar';
-  const [countries, setCountries] = useState<PublicCountry[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<PublicCountry[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -88,7 +87,6 @@ export default function LandingPage() {
         const response = await publicService.getCountries(debouncedSearch, 100);
         if (response.success) {
           const sorted = response.data.sort((a, b) => a.order - b.order);
-          setCountries(sorted);
           setFilteredCountries(sorted);
         }
       } catch (error) {
@@ -186,7 +184,7 @@ export default function LandingPage() {
               {t("Available Destinations", "الوجهات المتاحة")}
             </h2>
             <p className="text-gray-500 mt-2">
-              {t("Select a country to view and apply.", "اختر الدولة لعرض المعلومات.")}
+              {t("Tap a flag for details or start your application instantly.", "اضغط على العلم للتفاصيل أو ابدأ طلبك مباشرة.")}
             </p>
           </div>
           <div className="hidden md:block text-sm text-gray-400">
