@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState, useLayoutEffect, useEffect } from "react";
-import { ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { PublicCountry } from "../../services/public/public.service";
 import { useLanguage } from "../../contexts/language.context";
 import { Button } from "../ui/button";
@@ -198,7 +198,7 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
               </span>
 
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-[#00205b] shadow-sm">
-                {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                <ChevronDown className={`h-4 w-4 transition-transform duration-300 ease-out ${isOpen ? 'rotate-180' : 'rotate-0'}`} />
               </span>
             </button>
           </div>
