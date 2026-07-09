@@ -196,11 +196,11 @@ export default function LandingPage() {
             </h3>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="grid grid-cols-2 gap-2.5">
             {applicationFeesIncludes.map((item) => (
               <div
                 key={item}
-                className="flex items-center gap-2 rounded-full border border-white/70 bg-white/90 px-3 py-2 text-sm font-semibold text-gray-800 shadow-xs"
+                className="flex items-center gap-2 rounded-rounded1 border border-white/70 bg-white/90 px-3 py-2 text-sm font-semibold text-gray-800 shadow-xs"
               >
                 <span className="text-base leading-none" aria-hidden="true">✅</span>
                 <span>{item}</span>
