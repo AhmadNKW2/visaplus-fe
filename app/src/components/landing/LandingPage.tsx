@@ -14,6 +14,14 @@ import Image from "next/image";
 export default function LandingPage() {
   const { language, setLanguage, t } = useLanguage();
   const isRtl = language === 'ar';
+  const applicationFeesIncludes = [
+    t("Document translation", "ترجمة الوثائق"),
+    t("Travel insurance", "تأمين السفر"),
+    t("Hotel reservation", "حجز فندق"),
+    t("Flight booking", "تذكرة طائرة"),
+    t("Embassy appointment booking", "حجز موعد سفارة"),
+    t("Service fees", "رسوم الخدمة"),
+  ];
   const [filteredCountries, setFilteredCountries] = useState<PublicCountry[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -178,6 +186,32 @@ export default function LandingPage() {
       {/* Main Content */}
       <main ref={resultsRef} className="max-w-7xl w-full mx-auto px-6 py-16 scroll-mt-24">
         {/* ... (Rest of the component remains the same) ... */}
+        <section
+          className="mb-10 rounded-rounded1 border border-[#00205b]/10 bg-linear-to-br from-white via-[#f7f9ff] to-[#eef3ff] p-5 shadow-sm sm:p-7"
+          dir={isRtl ? 'rtl' : 'ltr'}
+        >
+          <div className={`mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+            <h3 className="text-xl font-extrabold text-[#00205b]">
+              {t("Application Fees Include", "رسوم التقديم تشمل")}
+            </h3>
+            <p className="mt-1 text-sm text-gray-600">
+              {t("Everything listed below is included in the application fee.", "كل ما يلي مشمول ضمن رسوم التقديم.")}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {applicationFeesIncludes.map((item) => (
+              <div
+                key={item}
+                className="flex items-center gap-2 rounded-rounded1 border border-white/70 bg-white/85 px-3 py-2.5 text-sm font-semibold text-gray-800 shadow-xs"
+              >
+                <span className="text-base leading-none" aria-hidden="true">✅</span>
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <div className="flex justify-between items-end mb-8">
           <div>
             <h2 className="text-3xl font-bold text-gray-900">
