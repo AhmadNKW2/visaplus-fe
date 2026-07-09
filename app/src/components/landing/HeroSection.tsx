@@ -18,7 +18,7 @@ export const HeroSection = ({ searchQuery, setSearchQuery, searchRef, onSearchSu
     const isRtl = language === 'ar';
 
     return (
-        <div className="mt-22 relative w-full overflow-hidden bg-slate-900 px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+        <div className="mt-22 relative w-full overflow-hidden bg-slate-900 px-4 py-5 sm:px-6 sm:py-10 lg:px-8">
             {/* Abstract Background Shapes */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] bg-blue-600/20 rounded-full blur-[100px]" />

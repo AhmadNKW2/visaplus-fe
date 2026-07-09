@@ -184,26 +184,23 @@ export default function LandingPage() {
         />
 
       {/* Main Content */}
-      <main ref={resultsRef} className="max-w-7xl w-full mx-auto px-6 py-16 scroll-mt-24">
+      <main ref={resultsRef} className="max-w-7xl w-full mx-auto px-6 py-4 sm:py-10 scroll-mt-24">
         {/* ... (Rest of the component remains the same) ... */}
         <section
-          className="mb-10 rounded-rounded1 border border-[#00205b]/10 bg-linear-to-br from-white via-[#f7f9ff] to-[#eef3ff] p-5 shadow-sm sm:p-7"
+          className="sm:mb-10 mb-5 rounded-rounded1 border border-[#00205b]/10 bg-linear-to-br from-white via-[#f7f9ff] to-[#eef3ff] p-3 shadow-sm sm:p-5"
           dir={isRtl ? 'rtl' : 'ltr'}
         >
-          <div className={`mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <div className={`mb-3 ${isRtl ? 'text-right' : 'text-left'}`}>
             <h3 className="text-xl font-extrabold text-[#00205b]">
               {t("Application Fees Include", "رسوم التقديم تشمل")}
             </h3>
-            <p className="mt-1 text-sm text-gray-600">
-              {t("Everything listed below is included in the application fee.", "كل ما يلي مشمول ضمن رسوم التقديم.")}
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="flex flex-wrap items-center gap-2.5">
             {applicationFeesIncludes.map((item) => (
               <div
                 key={item}
-                className="flex items-center gap-2 rounded-rounded1 border border-white/70 bg-white/85 px-3 py-2.5 text-sm font-semibold text-gray-800 shadow-xs"
+                className="flex items-center gap-2 rounded-full border border-white/70 bg-white/90 px-3 py-2 text-sm font-semibold text-gray-800 shadow-xs"
               >
                 <span className="text-base leading-none" aria-hidden="true">✅</span>
                 <span>{item}</span>
