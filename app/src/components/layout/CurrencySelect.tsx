@@ -30,7 +30,7 @@ function FlagBadge({
       style={{ width: size, height: size }}
     >
       <Image
-        src={`https://flagcdn.com/w80/${option.flagCode}.png`}
+        src={`/flags/${option.flagCode}.png`}
         alt={option.flagAlt}
         width={size}
         height={size}
