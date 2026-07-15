@@ -24,17 +24,15 @@ export interface CurrencyOption {
 const JOD_TO_USD = 1 / 0.71;
 
 /**
- * Round USD so the fractional part is only .0 or .5:
- * - 0.00–0.19 → .0
- * - 0.20–0.69 → .5
- * - 0.70–0.99 → next whole (.0)
+ * Round USD to a whole number only:
+ * - 0.00–0.29 → floor (.0)
+ * - 0.30–0.99 → ceil (add 1, .0)
  */
 function roundUsdPrice(amount: number): number {
   const whole = Math.floor(amount + 1e-9);
   const fraction = amount - whole;
 
-  if (fraction >= 0.7) return whole + 1;
-  if (fraction >= 0.2) return whole + 0.5;
+  if (fraction >= 0.3) return whole + 1;
   return whole;
 }
 
@@ -131,11 +129,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
 
     const converted = convertFromJod(numeric);
     const displayValue =
-      currency === "USD"
-        ? Number.isInteger(converted)
-          ? converted
-          : converted.toFixed(1)
-        : converted;
+      currency === "USD" ? Math.round(converted) : converted;
 
     return {
       value: displayValue,
