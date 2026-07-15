@@ -5,6 +5,7 @@ import { useRef, useState, useLayoutEffect, useEffect } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { PublicCountry } from "../../services/public/public.service";
 import { useLanguage } from "../../contexts/language.context";
+import { useCurrency } from "../../contexts/currency.context";
 import { Button } from "../ui/button";
 
 interface CountryCardProps {
@@ -24,19 +25,19 @@ const SCHENGEN_COUNTRIES = [
 
 export default function CountryCard({ country, isOpen, onToggle, onApply }: CountryCardProps) {
   const { language, t } = useLanguage();
+  const { formatPrice, currentOption } = useCurrency();
   const isRtl = language === 'ar';
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(0);
   const countryName = isRtl ? country.countryWorld.name_ar : country.countryWorld.name_en;
   const hasPricing = country.applyPrice != null || country.visaPrice != null;
+  const currencySymbol = isRtl ? currentOption.symbolAr : currentOption.symbol;
 
   const getPriceDisplay = (price?: number | null) => {
-    const numericPrice = Number(price);
-    const isFree = price != null && Number.isFinite(numericPrice) && numericPrice === 0;
-
+    const formatted = formatPrice(price);
     return {
-      label: isFree ? t("Free", "مجانا") : price,
-      showCurrency: !isFree,
+      label: formatted.isFree ? t("Free", "مجانا") : formatted.value,
+      showCurrency: formatted.showCurrency,
     };
   };
 
@@ -139,7 +140,7 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
                   </span>
                   {applyPriceDisplay.showCurrency && (
                     <span className="text-sm font-bold text-[#c02033]/80 leading-none">
-                      {isRtl ? 'دينار' : 'JD'}
+                      {currencySymbol}
                     </span>
                   )}
                 </div>
@@ -161,7 +162,7 @@ export default function CountryCard({ country, isOpen, onToggle, onApply }: Coun
                   </span>
                   {visaPriceDisplay.showCurrency && (
                     <span className="text-sm font-bold text-gray-500 leading-none">
-                      {isRtl ? 'دينار' : 'JD'}
+                      {currencySymbol}
                     </span>
                   )}
                 </div>

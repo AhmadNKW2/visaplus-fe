@@ -7,6 +7,7 @@ import { ToastContainer, Slide } from "react-toastify";
 import { QueryProvider } from "../../src/providers/query-provider";
 import { AuthProvider } from "../../src/contexts/auth.context";
 import { LanguageProvider } from "../../src/contexts/language.context";
+import { CurrencyProvider } from "../../src/contexts/currency.context";
 import { ProtectedRoute } from "../../src/components/auth/ProtectedRoute";
 import { LayoutContent } from "../../src/components/layout/LayoutContent";
 import { FloatingContactButtons } from "../../src/components/layout/FloatingContactButtons";
@@ -106,30 +107,32 @@ export default async function RootLayout({
         className={`${lato.variable} ${almarai.variable} antialiased`}
       >
         <LanguageProvider initialLang={validLang}>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-            transition={Slide}
-          />
-          <QueryProvider>
-            <AuthProvider>
-              <ProtectedRoute>
-                <LayoutContent>
-                  {children}
-                  <FloatingContactButtons />
-                  <Footer />
-                </LayoutContent>
-              </ProtectedRoute>
-            </AuthProvider>
-          </QueryProvider>
+          <CurrencyProvider>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+              transition={Slide}
+            />
+            <QueryProvider>
+              <AuthProvider>
+                <ProtectedRoute>
+                  <LayoutContent>
+                    {children}
+                    <FloatingContactButtons />
+                    <Footer />
+                  </LayoutContent>
+                </ProtectedRoute>
+              </AuthProvider>
+            </QueryProvider>
+          </CurrencyProvider>
         </LanguageProvider>
       </body>
     </html>

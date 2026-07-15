@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useLanguage } from "../../contexts/language.context";
 import { Button } from "../ui/button";
 import { ContactRequestModal } from "../landing/ContactRequestModal";
+import { CurrencySelect } from "./CurrencySelect";
 
 export const SiteHeader: React.FC = () => {
   const { language, setLanguage, t } = useLanguage();
@@ -22,7 +23,7 @@ export const SiteHeader: React.FC = () => {
           </div>
 
           {/* Right-side actions */}
-          <div className="flex items-center gap-4 shrink-0 order-1 sm:order-0 sm:ml-0">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0 order-1 sm:order-0 sm:ml-0">
             <nav className="hidden md:flex items-center gap-1">
               <a
                 href={`/${language}/about-us`}
@@ -38,6 +39,7 @@ export const SiteHeader: React.FC = () => {
               </a>
             </nav>
             <div className="w-px h-5 bg-gray-200 hidden md:block" />
+            <CurrencySelect />
             <button
               onClick={() => setLanguage(language === "en" ? "ar" : "en")}
               className="text-sm font-bold text-[#00205b] hover:text-blue-600 active:text-black transition-colors duration-300"
