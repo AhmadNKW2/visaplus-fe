@@ -35,6 +35,7 @@ function FlagBadge({
         width={size}
         height={size}
         className="h-full w-full scale-125 object-cover"
+        unoptimized
       />
     </span>
   );

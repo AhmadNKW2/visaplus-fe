@@ -25,9 +25,9 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
-    // Allow loading images from localhost (for development)
+    // Skip Next.js image optimizer so remote images (e.g. flagcdn) load in production
     dangerouslyAllowSVG: true,
-    unoptimized: process.env.NODE_ENV === 'development',
+    unoptimized: true,
   },
 };
 
