@@ -105,8 +105,8 @@ export const CurrencySelect: React.FC = () => {
         aria-expanded={open}
         aria-label={t("Select currency", "اختر العملة")}
         className={`
-          group relative inline-flex h-10 items-center gap-2
-          rounded-full pl-1.5 pr-3
+          group relative inline-flex h-9 items-center gap-1.5
+          rounded-full pl-1 pr-2
           bg-linear-to-b from-white to-[#f4f6fb]
           text-[#00205b]
           shadow-[0_1px_2px_rgba(0,32,91,0.06),0_0_0_1px_rgba(0,32,91,0.08)]
@@ -115,15 +115,16 @@ export const CurrencySelect: React.FC = () => {
           hover:-translate-y-px
           focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00205b]/25
           active:translate-y-0 active:scale-[0.98]
+          sm:h-10 sm:gap-2 sm:pl-1.5 sm:pr-3
           ${open ? "shadow-[0_4px_14px_rgba(0,32,91,0.12),0_0_0_1px_rgba(0,32,91,0.18)] -translate-y-px" : ""}
         `}
       >
-        <FlagBadge option={currentOption} size={28} ring />
-        <span className="text-[13px] font-extrabold tracking-wide">
+        <FlagBadge option={currentOption} size={26} ring />
+        <span className="hidden text-[13px] font-extrabold tracking-wide min-[400px]:inline">
           {currentOption.code}
         </span>
         <ChevronDown
-          className={`ml-0.5 h-3.5 w-3.5 text-[#00205b]/40 transition-transform duration-250 ease-out group-hover:text-[#00205b]/70 ${
+          className={`h-3.5 w-3.5 text-[#00205b]/40 transition-transform duration-250 ease-out group-hover:text-[#00205b]/70 sm:ml-0.5 ${
             open ? "rotate-180 text-[#00205b]/70" : ""
           }`}
         />
